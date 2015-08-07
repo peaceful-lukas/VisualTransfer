@@ -7,7 +7,7 @@ dataset = 'pascal';
 
 param = getParam(method, dataset);
 
-DS = loadDataset('pascal3d');
+DS = loadDataset(param.dataset);
 
 M = zeros(param.featureDim, param.numPrototypes*param.numClasses);
 for c=1:param.numClasses

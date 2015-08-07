@@ -17,7 +17,7 @@ dataset = 'awa';
 
 param = getParam(method, dataset);
 
-DS = loadDataset;
+DS = loadDataset(param.dataset);
 
 % ddCRP clustering
 numPrototypes = zeros(1, param.numClasses);

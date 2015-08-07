@@ -7,7 +7,6 @@ dataset = 'awa';
 
 param = getParam(method, dataset);
 
-
 DS = loadDataset(param.dataset);
 
 
