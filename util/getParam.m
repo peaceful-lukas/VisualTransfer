@@ -2,18 +2,17 @@ function param = getParam(method, dataset)
     param = {};
 
     switch dataset
-    case 'pascal'
-        param = getPascalParam(method);
-        break;
-    case 'pascal3d'
-        param = getPascal3dParam(method);
-        break;
-    case 'awa'
-        param = getAwaParam(method);
-        break;
-    otherwise
-        error(['No such dataset(' dataset ')']);
-        break;
+        case 'pascal'
+            param = getPascalParam(method);
+        
+        case 'pascal3d'
+            param = getPascal3dParam(method);
+        
+        case 'awa'
+            param = getAwaParam(method);
+        
+        otherwise
+            error(['No such dataset(' dataset ')']);
     end
 
     param.dataset = dataset;
