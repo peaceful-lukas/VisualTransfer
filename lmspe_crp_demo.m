@@ -15,7 +15,7 @@ addpath 'ddcrp'
 addpath 'util'
 
 method = 'lmspe_crp';
-dataset = 'pascal';
+dataset = 'awa';
 
 param = getParam(method, dataset);
 
