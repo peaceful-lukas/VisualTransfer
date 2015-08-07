@@ -39,7 +39,7 @@ while( n < param.maxAlter )
     W = learnW_lmspe(DS, W, U, param);
     U = learnU_lmspe(DS, W, U, param);
 
-    [~, accuracy] = dispAccuracy(method, n, DS, W, U, param);
+    [~, accuracy] = dispAccuracy(method, n+1, DS, W, U, param);
     
         
     if accuracy > highest_acc

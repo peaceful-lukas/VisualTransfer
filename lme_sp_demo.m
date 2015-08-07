@@ -30,7 +30,7 @@ while( n < param.maxAlter )
     W = learnW_lme_sp(DS, W, U, param);
     U = learnU_lme_sp(DS, W, U, param);
 
-    [~, accuracy] = dispAccuracy(method, n, DS, W, U);
+    [~, accuracy] = dispAccuracy(method, n+1, DS, W, U);
     
     if accuracy > highest_acc
         saveResult(method, param.dataset, accuracy, {param, W, U, C, accuracy});
