@@ -35,5 +35,11 @@ while( n < param.maxAlter )
 
     [~, accuracy] = dispAccuracy(method, n+1, DS, W, U, param);
 
+    if accuracy > highest_acc
+        saveResult(method, param.dataset, accuracy, {param, W, U, M, accuracy});
+        highest_acc = accuracy;
+        fprintf('highest accuracy has been renewed. (acc = %.4f)\n', highest_acc);
+    end
+
     n = n + 1;
 end
