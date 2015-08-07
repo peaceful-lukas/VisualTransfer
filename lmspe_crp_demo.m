@@ -26,28 +26,27 @@ numPrototypes = zeros(1, param.numClasses);
 classProtos = [];
 for c = 1:param.numClasses
     %---------------------------- Distance based CRP
-    % X_c = DS.D(:, find(DS.DL == c));
-    % D = conDstMat(X_c);
-    
-    % numData_c = size(X_c, 2);
-    % alpha = numData_c * 0.01;
-    % a = mean(mean(D));
-    % [ta, ~] = ddcrp(D, 'lgstc', alpha, a);
-    % numPrototypes(c) = numel(unique(ta));
-
-
-    %---------------------------- Simiarity based CRP
     X_c = DS.D(:, find(DS.DL == c));
-    S = conSimMat(X_c);
-    S = S/max(max(S));
+    D = conDstMat(X_c);
     
     numData_c = size(X_c, 2);
-    alpha = numData_c * 0.05;
-    a = 1;
-    [ta, ~] = ddcrp(S, 'lgstc', alpha, a);
+    alpha = numData_c * 0.01;
+    a = mean(mean(D));
+    [ta, ~] = ddcrp(D, 'lgstc', alpha, a);
     numPrototypes(c) = numel(unique(ta));
 
 
+    %---------------------------- Simiarity based CRP
+    % X_c = DS.D(:, find(DS.DL == c));
+    % S = conSimMat(X_c);
+    % S = S/max(max(S));
+    
+    % numData_c = size(X_c, 2);
+    % alpha = numData_c * 0.05;
+    % a = 1;
+    % [ta, ~] = ddcrp(S, 'lgstc', alpha, a);
+    % numPrototypes(c) = numel(unique(ta));
+    
 
     % centroids of each cluster by examining ta
     for p = 1:numel(unique(ta))
