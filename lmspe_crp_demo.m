@@ -1,7 +1,8 @@
-addpath 'lmspe_crp'
-addpath 'lmspe_crp/spe'
-addpath 'lmspe_crp/spe/csdp'
+addpath 'lme/lmspe_crp'
+addpath 'lme/lmspe_crp/spe'
+addpath 'lme/lmspe_crp/spe/csdp'
 addpath 'ddcrp'
+addpath 'util'
 
 
 param.numClasses = 20;

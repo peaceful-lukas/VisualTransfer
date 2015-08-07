@@ -1,5 +1,6 @@
 
-addpath 'lmspe_le'
+addpath 'lme/lmspe_le'
+addpath 'util'
 
 param.numClasses = 20;
 param.numPrototypes = 10;

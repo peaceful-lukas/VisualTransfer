@@ -1,5 +1,6 @@
 
-addpath 'lme_sp'
+addpath 'lme/lme_sp'
+addpath 'util'
 
 %------ BEST RESULT(80.xx%) for pascal VOC 2007 dataset
 % param.numClasses = 20;

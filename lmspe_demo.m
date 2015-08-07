@@ -1,5 +1,6 @@
 
-addpath 'lmspe'
+addpath 'lme/lmspe'
+addpath 'util'
 
 param.dataset = 'awa';
 param.numClasses = 200;
