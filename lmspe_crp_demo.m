@@ -1,31 +1,5 @@
-addpath 'lme/lmspe_crp'
-addpath 'lme/lmspe_crp/spe'
-addpath 'lme/lmspe_crp/spe/csdp'
-addpath 'ddcrp'
-addpath 'util'
-
-
-param.numClasses = 20;
-param.maxIterW = 1000;
-param.maxIterU = 1000;
-param.maxAlter = 40;
-param.batchSize = 50; % mini-batch size
-param.lowDim = 100;
-param.featureDim = 4096;
-
-param.knn_const = 3; % constant for constructing k-nn graph.
-param.c_lm = 0.3; % large margin for classification
-param.sp_lm = 0.01; % large margin for structure preserving
-param.lambda_W = 10; % regularizer coefficient
-param.lambda_U = 1000; % regularizer coefficient
-param.alpha = 5; % softmax parameter.
-param.lr_W = 0.0001; % learning rate for W
-param.lr_U = 0.00001; % learning rate for U
-param.bal_c = 1;
-param.bal_sp = 30;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%           Accuracy: 80.24%
 % 
 %   1. K-NN graph should be a connected graph !!
 %   2. fine-tuning
@@ -34,8 +8,18 @@ param.bal_sp = 30;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+addpath 'lme/lmspe_crp'
+addpath 'lme/lmspe_crp/spe'
+addpath 'lme/lmspe_crp/spe/csdp'
+addpath 'ddcrp'
+addpath 'util'
 
-% DS = loadDataset;
+method = 'lmspe_crp';
+dataset = 'pascal';
+
+param = getParam(method, dataset);
+
+DS = loadDataset;
 
 % ddCRP clustering
 numPrototypes = zeros(1, param.numClasses);
@@ -88,35 +72,21 @@ W = W/norm(W, 'fro');
 
 
 n = 0;
+highest_acc = 0;
 while( n < param.maxAlter )
     fprintf('\n============================= Iteration %d =============================\n', n+1);
 
     W = learnW_lmspe_crp(DS, W, U, param);
     U = learnU_lmspe_crp(DS, W, U, param);
 
+    [~, accuracy] = dispAccuracy(method, n, DS, W, U, param);
 
-    cumNumProto = cumsum(numPrototypes);
-    [~, classified_raw] = max(DS.D'*W'*U, [], 2);
-    classified = zeros(numel(classified_raw), 1);
-    for c = 1:param.numClasses
-        t = find(classified_raw <= cumNumProto(c));
-        classified(t) = c;
-        classified_raw(t) = Inf;
+    if accuracy > highest_acc
+        saveResult(method, param.dataset, accuracy, {param, W, U, C, accuracy});
+
+        highest_acc = accuracy;
+        fprintf('highest accuracy has been renewed. (acc = %.4f)\n', highest_acc);
     end
-    accuracy = numel(find(DS.DL == classified))/numel(DS.DL);
-    fprintf('Alternation %d) train set accuracy : %.4f\n', n+1, accuracy);
-
-
-    cumNumProto = cumsum(numPrototypes);
-    [~, classified_raw] = max(DS.T'*W'*U, [], 2);
-    classified = zeros(numel(classified_raw), 1);
-    for c = 1:param.numClasses
-        t = find(classified_raw <= cumNumProto(c));
-        classified(t) = c;
-        classified_raw(t) = Inf;
-    end
-    accuracy = numel(find(DS.TL == classified))/numel(DS.TL);
-    fprintf('Alternation %d) TEST set accuracy :  %.4f\n', n+1, accuracy);
 
     n = n + 1;
 end

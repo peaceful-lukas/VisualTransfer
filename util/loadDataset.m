@@ -15,7 +15,7 @@ function DS = loadDataset(dataset)
     toc
 
     DS = {};
-		DS.dataset = dataset;
+	DS.dataset = dataset;
     DS.D = D;
     DS.DL = D_labels;
  %   DS.DI = DI;
