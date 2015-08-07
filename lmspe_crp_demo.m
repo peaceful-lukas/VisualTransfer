@@ -9,8 +9,6 @@
 
 
 addpath 'lme/lmspe_crp'
-addpath 'lme/lmspe_crp/spe'
-addpath 'lme/lmspe_crp/spe/csdp'
 addpath 'ddcrp'
 addpath 'util'
 
