@@ -69,7 +69,7 @@ W = W/norm(W, 'fro');
 
 
 n = 0;
-highest_acc = 0;
+highest_acc = 0.5;
 while( n < param.maxAlter )
     fprintf('\n============================= Iteration %d =============================\n', n+1);
 
