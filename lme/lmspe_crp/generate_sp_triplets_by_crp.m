@@ -22,28 +22,34 @@ function [spTriplets knnGraphs] = generate_sp_triplets_by_crp(P, param)
         knnGraphs{c} = zeros(numPrototypes(c), numPrototypes(c));
         P_c = P(:, proto_offset+1:proto_offset+numPrototypes(c));
 
-        for k=1:numPrototypes(c)
-            sim = sum(bsxfun(@times, P_c, P_c(:, k)), 1);
-            sim(k) = -Inf;
-
-            [~, sorted_sim_idx] = sort(sim, 'descend');
+        % in case that the number of prototypes for a class 'c' is less than knn_const, which is generally 3
+        if knn_const >= numPrototypes(c)
+            knnGraphs{c} = ones(numPrototypes(c), numPrototypes(c)) - eye(numPrototypes(c), numPrototypes(c));
             
-            % knn-graph
-            knnGraphs{c}(k, sorted_sim_idx(1:knn_const)) = 1;
+        else
+            for k=1:numPrototypes(c)
+                sim = sum(bsxfun(@times, P_c, P_c(:, k)), 1);
+                sim(k) = -Inf;
 
-            % sp-triplets
-            sorted_sim_idx = sorted_sim_idx + proto_offset;
-            neighbors_idx = sorted_sim_idx(1:knn_const);
+                [~, sorted_sim_idx] = sort(sim, 'descend');
+                
+                % knn-graph
+                knnGraphs{c}(k, sorted_sim_idx(1:knn_const)) = 1;
 
-            numSpTriplets_ck = (knn_const) * (numPrototypes(c)-1-knn_const);
+                % sp-triplets
+                sorted_sim_idx = sorted_sim_idx + proto_offset;
+                neighbors_idx = sorted_sim_idx(1:knn_const);
 
-            spTriplets_ck = zeros(numSpTriplets_ck, 3);
-            tmp_sec_col = repmat(neighbors_idx, numPrototypes(c)-1-knn_const, 1);
-            spTriplets_ck(:, 1) = repmat(proto_offset+k, numSpTriplets_ck, 1);
-            spTriplets_ck(:, 2) = tmp_sec_col(:);
-            spTriplets_ck(:, 3) = repmat(sorted_sim_idx(knn_const+1:end-1)', knn_const, 1);
+                numSpTriplets_ck = (knn_const) * (numPrototypes(c)-1-knn_const);
 
-            spTriplets = [spTriplets; spTriplets_ck];
+                spTriplets_ck = zeros(numSpTriplets_ck, 3);
+                tmp_sec_col = repmat(neighbors_idx, numPrototypes(c)-1-knn_const, 1);
+                spTriplets_ck(:, 1) = repmat(proto_offset+k, numSpTriplets_ck, 1);
+                spTriplets_ck(:, 2) = tmp_sec_col(:);
+                spTriplets_ck(:, 3) = repmat(sorted_sim_idx(knn_const+1:end-1)', knn_const, 1);
+
+                spTriplets = [spTriplets; spTriplets_ck];
+            end
         end
 
         knnGraphs{c} = max(triu(knnGraphs{c})+triu(knnGraphs{c})', tril(knnGraphs{c}) + tril(knnGraphs{c})');
