@@ -5,7 +5,8 @@ function W = learnW_lmspe_crp(DS, W, U, param)
     while( n < param.maxIterW )
         tic
         cTriplets = sampleClassficationTriplets(DS, W, U, param);
-        dW = computeGradient(DS, W, U, cTriplets, param);
+        simViolIdx = getSimilarityBoundViolations(DS, W, U, param);
+        dW = computeGradient(DS, W, U, cTriplets, simViolIdx, param);
         [W param] = update(W, dW, param.lr_W, param);
 
         if mod(n, 100) == 99
@@ -27,17 +28,31 @@ function [W param] = update(W, dW, learning_rate, param)
     end
 end
 
-function dW = computeGradient(DS, W, U, triplets, param)
+function dW = computeGradient(DS, W, U, triplets, simViolIdx, param)
     X = DS.D;
+    labels = DS.DL;
     lambda_W = param.lambda_W;
     numTriplets = size(triplets, 1);
+    U_cell = {};
+    protoStartIdx = [0 cumsum(param.numPrototypes)];
+    for c=1:param.numClasses
+        U_cell{c} = U(:, protoStartIdx(c)+1:protoStartIdx(c+1));
+    end
     
+    dW = 0;
     if( numTriplets > 0 )
         dW = computeApproximateMaxGradient(X, W, U, triplets, 3, param) - computeApproximateMaxGradient(X, W, U, triplets, 2, param);
-        dW = dW/numTriplets + lambda_W*W/size(W, 2);
-    else
-        dW = lambda_W*W/size(W, 2);
+        dW = dW/numTriplets;
     end
+    if( simViolIdx > 0 )
+        simViol_dW = 0;
+        for n=1:length(labels)
+             simViol_dW = simViol_dW + U_cell{labels(n)}*X(:, n)'/param.numPrototypes(labels(n));
+        end
+        dW = dW + simViol_dW;
+    end
+
+    dW = dW + lambda_W*W/size(W, 2);
 end
 
 function appr_max_dW = computeApproximateMaxGradient(X, W, U, triplets, tripl_col, param)
@@ -129,3 +144,27 @@ function cTriplets = validClassificationTriplets(DS, W, U, cTriplets, param)
    
     cTriplets = cTriplets(valids, :);    
 end
+
+function simViolIdx = getSimilarityBoundViolations(DS, W, U, param)
+    X = DS.D;
+    labels = DS.DL;
+    sim_bound = param.sim_bound;
+    U_cell = {};
+    protoStartIdx = [0 cumsum(param.numPrototypes)];
+    for c=1:param.numClasses
+        U_cell{c} = U(:, protoStartIdx(c)+1:protoStartIdx(c+1));
+    end
+
+    viol = zeros(length(labels), 1);
+    for n=1:length(labels)
+        viol(n) = sim_bound > mean(X(:, n)'*W'*U_cell{labels(n)});
+    end
+
+    simViolIdx = find(viol);
+end
+
+
+
+
+
+
