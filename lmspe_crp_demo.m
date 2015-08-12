@@ -29,7 +29,7 @@ for c = 1:param.numClasses
     D = conDstMat(X_c);
     
     numData_c = size(X_c, 2);
-    alpha = numData_c * 0.0001;
+    alpha = numData_c * 0.001;
     a = mean(mean(D));
     [ta, ~] = ddcrp(D, 'lgstc', alpha, a);
     numPrototypes(c) = numel(unique(ta));

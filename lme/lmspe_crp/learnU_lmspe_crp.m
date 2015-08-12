@@ -6,7 +6,8 @@ function U = learnU_lmspe_crp(DS, W, U, param)
         tic
         cTriplets = sampleClassficationTriplets(DS, W, U, param);
         spTriplets = validStructurePreservingTriplets(U, param);
-        dU = computeGradient(DS, W, U, cTriplets, spTriplets, param);
+        simViolIdx = getSimilarityBoundViolations(DS, W, U, param);
+        dU = computeGradient(DS, W, U, cTriplets, spTriplets, simViolIdx, param);
         [U param] = update(U, dU, param.lr_U, param);
 
         if mod(n, 100) == 99
@@ -28,8 +29,9 @@ function [U param] = update(U, dU, learning_rate, param)
     end
 end
 
-function dU = computeGradient(DS, W, U, cTriplets, spTriplets, param)
+function dU = computeGradient(DS, W, U, cTriplets, spTriplets, simViolIdx, param)
     X = DS.D;
+    labels = DS.DL;
     num_cTriplets = size(cTriplets, 1);
     num_spTriplets = size(spTriplets, 1);
     numClasses = param.numClasses;
@@ -40,6 +42,12 @@ function dU = computeGradient(DS, W, U, cTriplets, spTriplets, param)
     lowDim = param.lowDim;
     bal_c = param.bal_c;
     bal_sp = param.bal_sp;
+    bal_b = param.bal_b;
+
+    U_cell = {};
+    for c=1:param.numClasses
+        U_cell{c} = U(:, protoStartIdx(c)+1:protoStartIdx(c+1));
+    end
 
 
     c_dU = zeros(size(U, 1), size(U, 2));
@@ -74,23 +82,40 @@ function dU = computeGradient(DS, W, U, cTriplets, spTriplets, param)
         sp_dU = sp_dU/num_spTriplets;
     end
 
+    b_dU = zeros(size(U));
+    if( numel(simViolIdx) > 0 )
+        for n=simViolIdx
+            c = labels(n);
+            tmp_dU = zeros(size(U));
+            tmp_dU(:, protoStartIdx(c)+1:protoStartIdx(c+1)) = repmat(W*X(:, n), 1, numPrototypes(c))/numPrototypes(c);
+            b_dU = b_dU + tmp_dU;
+        end
+    end
+
     ratio = sqrt(norm(c_dU, 'fro')/norm(sp_dU, 'fro'));
     sp_dU = ratio*sp_dU;
     
-    dU = bal_c*c_dU + bal_sp*sp_dU + lambda_U*U/size(U, 2);
+    dU = bal_c*c_dU + bal_sp*sp_dU + bal_b*b_dU + lambda_U*U/size(U, 2);
 end
 
 
 function loss = getSampleLoss(DS, W, U, param)
     X = DS.D;
+    labels = DS.DL;
     numPrototypes = param.numPrototypes;
     protoStartIdx = [0 cumsum(numPrototypes)];
     cTriplets = sampleClassficationTriplets(DS, W, U, param);
     spTriplets = validStructurePreservingTriplets(U, param);
+    simViolIdx = getSimilarityBoundViolations(DS, W, U, param);
     num_cTriplets = size(cTriplets, 1);
     num_spTriplets = size(spTriplets, 1);
     lambda_W = param.lambda_W;
     lambda_U = param.lambda_U;
+    sim_bound = param.sim_bound;
+    U_cell = {};
+    for c=1:param.numClasses
+        U_cell{c} = U(:, protoStartIdx(c)+1:protoStartIdx(c+1));
+    end
 
 
     cErr = 0;
@@ -107,9 +132,18 @@ function loss = getSampleLoss(DS, W, U, param)
         spErr = param.bal_sp*spErr;
     end
 
-    loss = cErr + spErr + lambda_W*0.5*norm(W, 'fro')^2/size(W, 2) + lambda_U*0.5*norm(U, 'fro')^2/size(U, 2);
+    bErr = 0;
+    if( numel(simViolIdx) > 0 )
+        for n=simViolIdx
+            bErr = bErr + sim_bound - mean(X(:, n)'*W'*U_cell{labels(n)});
+        end
+        bErr = bErr/numel(simViolIdx);
+        bErr = param.bal_b*bErr;
+    end
 
-    fprintf('cViol: %d / spViol: %d / loss: %f / cErr: %f / spErr: %f / normW: %f / normU: %f / ', num_cTriplets, num_spTriplets, loss, cErr, spErr, norm(W, 'fro'), norm(U, 'fro'));
+    loss = cErr + spErr + bErr + lambda_W*0.5*norm(W, 'fro')^2/size(W, 2) + lambda_U*0.5*norm(U, 'fro')^2/size(U, 2);
+
+    fprintf('cViol: %d / spViol: %d / simViol: %d / loss: %f / cErr: %f / spErr: %f / bErr: %f / normW: %f / normU: %f / ', num_cTriplets, num_spTriplets, numel(simViolIdx), loss, cErr, spErr, bErr, norm(W, 'fro'), norm(U, 'fro'));
 end
 
 function valid_spTriplets = validStructurePreservingTriplets(U, param)
@@ -154,3 +188,27 @@ function cTriplets = validClassificationTriplets(DS, W, U, cTriplets, param)
    
     cTriplets = cTriplets(valids, :);    
 end
+
+
+function simViolIdx = getSimilarityBoundViolations(DS, W, U, param)
+    X = DS.D;
+    labels = DS.DL;
+    sim_bound = param.sim_bound;
+    batchIdx = randperm(length(labels), param.batchSize);
+
+    U_cell = {};
+    protoStartIdx = [0 cumsum(param.numPrototypes)];
+    for c=1:param.numClasses
+        U_cell{c} = U(:, protoStartIdx(c)+1:protoStartIdx(c+1));
+    end
+    
+    viol = zeros(length(labels), 1);
+    for n=batchIdx
+        viol(n) = sim_bound > mean(X(:, n)'*W'*U_cell{labels(n)});
+    end
+
+    simViolIdx = find(viol)';
+end
+
+
+
