@@ -24,7 +24,6 @@ DS = loadDataset(param.dataset);
 numPrototypes = zeros(1, param.numClasses);
 classProtos = [];
 for c = 1:param.numClasses
-    keyboard;
     %---------------------------- Distance based CRP
     X_c = DS.D(:, find(DS.DL == c));
     D = conDstMat(X_c);
