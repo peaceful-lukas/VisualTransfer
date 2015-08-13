@@ -88,7 +88,6 @@ function param = getPascal3dParam(method)
         param.lr_U = 0.00001; % learning rate for U
         param.bal_c = 1;
         param.bal_sp = 10;
-        param.bal_b = 0.0001;
 
     elseif strcmp(method, 'lmspe_le')
 
