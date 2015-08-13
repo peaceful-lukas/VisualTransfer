@@ -33,31 +33,32 @@ function dW = computeGradient(DS, W, U, triplets, simViolIdx, param)
     labels = DS.DL;
     lambda_W = param.lambda_W;
     numTriplets = size(triplets, 1);
+    bal_c = param.bal_c;
+    bal_b = param.bal_b;
     U_cell = {};
     protoStartIdx = [0 cumsum(param.numPrototypes)];
     for c=1:param.numClasses
         U_cell{c} = U(:, protoStartIdx(c)+1:protoStartIdx(c+1));
     end
     
-    dW = 0;
+    c_dW = 0;
     if( numTriplets > 0 )
-        dW = computeApproximateMaxGradient(X, W, U, triplets, 3, param) - computeApproximateMaxGradient(X, W, U, triplets, 2, param);
-        dW = dW/numTriplets;
+        c_dW = computeApproximateMaxGradient(X, W, U, triplets, 3, param) - computeApproximateMaxGradient(X, W, U, triplets, 2, param);
+        c_dW = c_dW/numTriplets;
     end
     
+    b_dW = zeros(size(W));
     if( numel(simViolIdx) > 0 )
-        simViol_dW = zeros(size(W));
         for n=simViolIdx
-            simViol_dW = simViol_dW + U_cell{labels(n)}*repmat(X(:, n)', size(U_cell{labels(n)}, 2), 1)/param.numPrototypes(labels(n));
+            b_dW = b_dW + U_cell{labels(n)}*repmat(X(:, n)', size(U_cell{labels(n)}, 2), 1)/param.numPrototypes(labels(n));
         end
-        % for n=1:numel(simViolIdx)
-        %     idx = simViolIdx(n);
-        %     simViol_dW = simViol_dW + U_cell{labels(idx)}*repmat(X(:, idx)', size(U_cell{labels(idx)}, 2), 1)/param.numPrototypes(labels(idx));
-        % end
-        dW = dW + simViol_dW/numel(simViolIdx);
+        b_dW = b_dW/numel(simViolIdx);
     end
 
-    dW = dW + lambda_W*W/size(W, 2);
+    ratio = sqrt(norm(c_dW, 'fro')/norm(b_dW, 'fro'));
+    b_dW = ratio*b_dW;
+
+    dW = bal_c*c_dW + bal_b*b_dW + lambda_W*W/size(W, 2);
 end
 
 function appr_max_dW = computeApproximateMaxGradient(X, W, U, triplets, tripl_col, param)

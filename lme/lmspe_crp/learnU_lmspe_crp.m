@@ -94,6 +94,8 @@ function dU = computeGradient(DS, W, U, cTriplets, spTriplets, simViolIdx, param
 
     ratio = sqrt(norm(c_dU, 'fro')/norm(sp_dU, 'fro'));
     sp_dU = ratio*sp_dU;
+    ratio = sqrt(norm(c_dU, 'fro')/norm(b_dU, 'fro'));
+    b_dU = ratio*b_dU;
     
     dU = bal_c*c_dU + bal_sp*sp_dU + bal_b*b_dU + lambda_U*U/size(U, 2);
 end

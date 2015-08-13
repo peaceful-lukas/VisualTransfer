@@ -74,7 +74,7 @@ function param = getPascal3dParam(method)
         param.maxIterU = 1000;
         param.maxAlter = 50;
         param.batchSize = 10; % mini-batch size
-        param.lowDim = 50;
+        param.lowDim = 200;
         param.featureDim = 9216;
 
         param.knn_const = 3; % constant for constructing k-nn graph.
@@ -88,7 +88,7 @@ function param = getPascal3dParam(method)
         param.lr_U = 0.00001; % learning rate for U
         param.bal_c = 1;
         param.bal_sp = 10;
-        param.bal_b = 1;
+        param.bal_b = 0.0001;
 
     elseif strcmp(method, 'lmspe_le')
 

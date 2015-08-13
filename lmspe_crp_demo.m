@@ -14,7 +14,7 @@ addpath 'ddcrp'
 addpath 'util'
 
 method = 'lmspe_crp';
-dataset = 'awa';
+dataset = 'pascal3d';
 
 param = getParam(method, dataset);
 
@@ -24,6 +24,7 @@ DS = loadDataset(param.dataset);
 numPrototypes = zeros(1, param.numClasses);
 classProtos = [];
 for c = 1:param.numClasses
+    keyboard;
     %---------------------------- Distance based CRP
     X_c = DS.D(:, find(DS.DL == c));
     D = conDstMat(X_c);
@@ -71,8 +72,12 @@ W = W/norm(W, 'fro');
 
 n = 0;
 highest_acc = 0.5;
-while( n < param.maxAlter )
+iter_condition = 1;
+while( n < param.maxAlter & iter_condition )
     fprintf('\n============================= Iteration %d =============================\n', n+1);
+
+    prev_W = norm(W, 'fro');
+    prev_U = norm(U, 'fro');
 
     W = learnW_lmspe_crp(DS, W, U, param);
     U = learnU_lmspe_crp(DS, W, U, param);
@@ -85,6 +90,8 @@ while( n < param.maxAlter )
         highest_acc = accuracy;
         fprintf('highest accuracy has been renewed. (acc = %.4f)\n', highest_acc);
     end
+
+    iter_condition = sqrt((norm(W, 'fro') - prev_W)^2 +  (norm(U, 'fro') - prev_U)^2) > 0.1;
 
     n = n + 1;
 end
