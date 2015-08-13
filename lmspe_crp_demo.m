@@ -7,7 +7,7 @@
 %   4. transfer knowledge by computing the newly added prototype.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/twkim/code/VisualTransfer
+cd /v9/code/VisualTransfer
 
 addpath 'lme/lmspe_crp'
 addpath 'ddcrp'

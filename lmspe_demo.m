@@ -1,4 +1,4 @@
-cd /home/twkim/code/VisualTransfer
+cd /v9/code/VisualTransfer
 addpath 'lme/lmspe'
 addpath 'util'
 
