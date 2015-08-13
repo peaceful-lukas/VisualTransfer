@@ -79,8 +79,7 @@ function param = getPascal3dParam(method)
 
         param.knn_const = 3; % constant for constructing k-nn graph.
         param.c_lm = 10; % large margin for classification
-        param.sp_lm = 0.1; % large margin for structure preserving
-        param.sim_bound = 30; % lower bound for the similarities in the pulling term
+        param.sp_lm = 0.01; % large margin for structure preserving
         param.lambda_W = 100000; % regularizer coefficient
         param.lambda_U = 1000; % regularizer coefficient
         param.alpha = 5; % softmax parameter.
