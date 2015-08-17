@@ -158,13 +158,33 @@ function param = getAwaParam(method)
         % param.bal_c = 1;
         % param.bal_sp = 10;
 
-        (2)
+        % (2)
+        % param.numClasses = 50;
+        % param.maxIterW = 1000;
+        % param.maxIterU = 1000;
+        % param.maxAlter = 50;
+        % param.batchSize = 10; % mini-batch size
+        % param.lowDim = 300;
+        % param.featureDim = 9216;
+
+        % param.knn_const = 3; % constant for constructing k-nn graph.
+        % param.c_lm = 10; % large margin for classification
+        % param.sp_lm = 0.1; % large margin for structure preserving
+        % param.lambda_W = 1000000; % regularizer coefficient
+        % param.lambda_U = 10000; % regularizer coefficient
+        % param.alpha = 5; % softmax parameter.
+        % param.lr_W = 0.00001; % learning rate for W
+        % param.lr_U = 0.00001; % learning rate for U
+        % param.bal_c = 1;
+        % param.bal_sp = 10;
+
+        (3)
         param.numClasses = 50;
         param.maxIterW = 1000;
         param.maxIterU = 1000;
         param.maxAlter = 50;
         param.batchSize = 10; % mini-batch size
-        param.lowDim = 300;
+        param.lowDim = 426;
         param.featureDim = 9216;
 
         param.knn_const = 3; % constant for constructing k-nn graph.
@@ -177,6 +197,7 @@ function param = getAwaParam(method)
         param.lr_U = 0.00001; % learning rate for U
         param.bal_c = 1;
         param.bal_sp = 10;
+
 
 
     elseif strcmp(method, 'lmspe_le')
