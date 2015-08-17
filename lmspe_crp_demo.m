@@ -1,11 +1,4 @@
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-%   1. K-NN graph should be a connected graph !!
-%   2. fine-tuning
-%   3. graph matching
-%   4. transfer knowledge by computing the newly added prototype.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  K-NN graph should be a connected graph !!
 
 cd /v9/code/VisualTransfer
 
@@ -14,7 +7,7 @@ addpath 'ddcrp'
 addpath 'util'
 
 method = 'lmspe_crp';
-dataset = 'pascal3d';
+dataset = 'awa';
 
 param = getParam(method, dataset);
 
@@ -70,7 +63,7 @@ W = W/norm(W, 'fro');
 
 
 n = 0;
-highest_acc = 0.5;
+highest_acc = 0.6;
 iter_condition = 1;
 while( n < param.maxAlter & iter_condition )
     fprintf('\n============================= Iteration %d =============================\n', n+1);
