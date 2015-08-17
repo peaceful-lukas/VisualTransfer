@@ -184,7 +184,7 @@ function param = getAwaParam(method)
         param.maxIterU = 1000;
         param.maxAlter = 50;
         param.batchSize = 10; % mini-batch size
-        param.lowDim = 426;
+        param.lowDim = 400;
         param.featureDim = 9216;
 
         param.knn_const = 3; % constant for constructing k-nn graph.
