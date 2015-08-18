@@ -57,9 +57,9 @@ param.knnGraphs = knnGraphs;
 [~, pca_score, ~] = pca(classProtos');
 U0 = pca_score(:, 1:param.lowDim)'; % approximate the original distributions of prototypes.
 U0 = normc(U0);
+W0 = randn(param.lowDim, param.featureDim);
+W0 = W0/norm(W0, 'fro');
 W0 = learnW_lmspe_crp(DS, W, U0, param); % initialize with pre-learned W.
-% W = randn(param.lowDim, param.featureDim);
-% W = W/norm(W, 'fro');
 
 
 n = 0;
