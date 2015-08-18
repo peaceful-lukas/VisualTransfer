@@ -60,7 +60,7 @@ U0 = pca_score(:, 1:param.lowDim)'; % approximate the original distributions of 
 U0 = normc(U0);
 W0 = randn(param.lowDim, param.featureDim);
 W0 = W0/norm(W0, 'fro');
-W0 = learnW_lmspe_crp(DS, W, U0, param); % initialize with pre-learned W.
+W0 = learnW_lmspe_crp(DS, W0, U0, param); % initialize with pre-learned W.
 
 
 n = 0;
