@@ -55,19 +55,15 @@ param.knnGraphs = knnGraphs;
 
 
 [~, pca_score, ~] = pca(classProtos');
-U0 = pca_score(:, 1:param.lowDim)'; % approximate the original distributions of prototypes.
-U0 = normc(U0);
-W0 = randn(param.lowDim, param.featureDim);
-W0 = W0/norm(W0, 'fro');
-W0 = learnW_lmspe_crp(DS, W0, U0, param); % initialize with pre-learned W.
+U = pca_score(:, 1:param.lowDim)'; % approximate the original distributions of prototypes.
+U = normc(U);
+W = randn(param.lowDim, param.featureDim);
+W = W/norm(W, 'fro');
 
 
 n = 0;
 highest_acc = 0.5;
 iter_condition = 1;
-
-W = W0;
-U = U0;
 
 while( n < param.maxAlter & iter_condition )
     fprintf('\n============================= Iteration %d =============================\n', n+1);
@@ -75,8 +71,8 @@ while( n < param.maxAlter & iter_condition )
     prev_W = norm(W, 'fro');
     prev_U = norm(U, 'fro');
 
-    W = learnW_lmspe_crp(DS, W0, U, param);
-    U = learnU_lmspe_crp(DS, W, U0, param);
+    W = learnW_lmspe_crp(DS, W, U, param);
+    U = learnU_lmspe_crp(DS, W, U, param);
 
     [~, accuracy] = dispAccuracy(method, n+1, DS, W, U, param);
 
