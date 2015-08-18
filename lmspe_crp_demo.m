@@ -88,7 +88,7 @@ while( n < param.maxAlter & iter_condition )
         fprintf('highest accuracy has been renewed. (acc = %.4f)\n', highest_acc);
     end
 
-    iter_condition = sqrt((norm(W, 'fro') - prev_W)^2 +  (norm(U, 'fro') - prev_U)^2) > 0.001;
+    iter_condition = sqrt((norm(W, 'fro') - prev_W)^2 +  (norm(U, 'fro') - prev_U)^2) > 0.000001;
 
     n = n + 1;
 end
