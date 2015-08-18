@@ -66,11 +66,15 @@ W0 = learnW_lmspe_crp(DS, W0, U0, param); % initialize with pre-learned W.
 n = 0;
 highest_acc = 0.6;
 iter_condition = 1;
-prev_W = norm(W0, 'fro');
-prev_U = norm(U0, 'fro');
+
+W = W0;
+U = U0;
 
 while( n < param.maxAlter & iter_condition )
     fprintf('\n============================= Iteration %d =============================\n', n+1);
+
+    prev_W = norm(W, 'fro');
+    prev_U = norm(U, 'fro');
 
     W = learnW_lmspe_crp(DS, W0, U, param);
     U = learnU_lmspe_crp(DS, W, U0, param);
@@ -85,9 +89,6 @@ while( n < param.maxAlter & iter_condition )
     end
 
     iter_condition = sqrt((norm(W, 'fro') - prev_W)^2 +  (norm(U, 'fro') - prev_U)^2) > 0.001;
-
-    prev_W = norm(W, 'fro');
-    prev_U = norm(U, 'fro');
 
     n = n + 1;
 end
