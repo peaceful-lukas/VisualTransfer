@@ -73,10 +73,10 @@ function dU = computeGradient(DS, W, U, cTriplets, spTriplets, param)
         sp_dU = sp_dU/size(param.spTriplets, 1);
     end
 
-    % if( num_spTriplets > 0 )
-    %     ratio = sqrt(norm(c_dU, 'fro')/norm(sp_dU, 'fro'));
-    %     sp_dU = ratio*sp_dU;
-    % end
+    if( num_spTriplets > 0 )
+        ratio = sqrt(norm(c_dU, 'fro')/norm(sp_dU, 'fro'));
+        sp_dU = ratio*sp_dU;
+    end
     dU = bal_c*c_dU + bal_sp*sp_dU + lambda_U*U/size(U, 2);
 end
 
