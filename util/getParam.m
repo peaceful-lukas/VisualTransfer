@@ -323,7 +323,7 @@ function param = get3DObjParam(method)
         param.lr_W = 0.00001; % learning rate for W
         param.lr_U = 0.00001; % learning rate for U
         param.bal_c = 1;
-        param.bal_sp = 10;
+        param.bal_sp = 1000;
     elseif strcmp(method, 'lmspe_le')
 
     end
