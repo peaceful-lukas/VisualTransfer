@@ -19,6 +19,17 @@ function DS = loadDataset(dataset)
         DS.T = teF;
         DS.TL = teL;
         DS.TI = teI;
+    elseif strcmp(dataset, '3dobj')
+        load('/v9/3Ddataset/exp_dataset/trF.mat');
+        load('/v9/3Ddataset/exp_dataset/teF.mat');
+        load('/v9/3Ddataset/exp_dataset/trL.mat');
+        load('/v9/3Ddataset/exp_dataset/teL.mat');
+
+        DS = {};
+        DS.D = trF;
+        DS.DL = trL;
+        DS.T = teF;
+        DS.TL = teL;
     else
         tic;
         train_feat_dir = ['/v9/' dataset '/Features/train/'];
