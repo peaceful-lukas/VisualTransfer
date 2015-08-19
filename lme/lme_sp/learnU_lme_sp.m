@@ -44,7 +44,7 @@ function dU = computeGradient(DS, W, U, triplets, param)
             dU = dU + W*x_i*(bin_c - bin_y_i)';
         end
 
-        dU = dU + lambda_U*U/size(U, 2);
+        dU = dU/param.batchSize + lambda_U*U/size(U, 2);
     else
         dU = lambda_U*U/size(U, 2);
     end

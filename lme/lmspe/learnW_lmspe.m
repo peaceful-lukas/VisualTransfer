@@ -34,7 +34,7 @@ function dW = computeGradient(DS, W, U, triplets, param)
     
     if( numTriplets > 0 )
         dW = computeApproximateMaxGradient(X, W, U, triplets, 3, param) - computeApproximateMaxGradient(X, W, U, triplets, 2, param);
-        dW = dW/numTriplets + lambda_W*W/size(W, 2);
+        dW = dW/param.batchSize + lambda_W*W/size(W, 2);
     else
         dW = lambda_W*W/size(W, 2);
     end

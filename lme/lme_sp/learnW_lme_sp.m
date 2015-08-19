@@ -34,7 +34,7 @@ function dW = computeGradient(DS, W, U, triplets, param)
         dW_cat = cat(3, dW_cell{:});
         dW = sum(dW_cat, 3);
         
-        dW = dW/numTriplets + lambda_W*W/size(W, 2);
+        dW = dW/param.batchSize + lambda_W*W/size(W, 2);
     else
         dW = lambda_W*W/size(W, 2);
     end
