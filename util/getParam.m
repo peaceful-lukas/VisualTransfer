@@ -10,6 +10,9 @@ function param = getParam(method, dataset)
         
         case 'awa'
             param = getAwaParam(method);
+
+        case '3dobj'
+            param = get3DObjParam(method);
         
         otherwise
             error(['No such dataset(' dataset ')']);
@@ -285,3 +288,43 @@ function param = getAwaParam(method)
 
 end
 
+function param = get3DObjParam(method)
+    if strcmp(method, 'lme_sp')
+        param.numClasses = 10;
+        param.lowDim = 10;
+        param.featureDim = 9216;
+        param.maxIterW = 1000;
+        param.maxIterU = 1000;
+        param.maxAlter = 50;
+        param.batchSize = 30; % mini-batch size
+
+        param.lr_W = 0.0001; % learning rate for W
+        param.lr_U = 0.00001; % learning rate for U
+        param.lm = 20; % large margin for classification
+        param.lambda_W = 100; % regularizer coefficient
+        param.lambda_U = 100; % regularizer coefficient
+    elseif strcmp(method, 'lmspe')
+
+    elseif strcmp(method, 'lmspe_crp')
+        param.numClasses = 10;
+        param.maxIterW = 1000;
+        param.maxIterU = 1000;
+        param.maxAlter = 50;
+        param.batchSize = 10; % mini-batch size
+        param.lowDim = 50;
+        param.featureDim = 9216;
+
+        param.knn_const = 3; % constant for constructing k-nn graph.
+        param.c_lm = 10; % large margin for classification
+        param.sp_lm = 0.01; % large margin for structure preserving
+        param.lambda_W = 100000; % regularizer coefficient
+        param.lambda_U = 1000; % regularizer coefficient
+        param.alpha = 5; % softmax parameter.
+        param.lr_W = 0.00001; % learning rate for W
+        param.lr_U = 0.00001; % learning rate for U
+        param.bal_c = 1;
+        param.bal_sp = 10;
+    elseif strcmp(method, 'lmspe_le')
+
+    end
+end
