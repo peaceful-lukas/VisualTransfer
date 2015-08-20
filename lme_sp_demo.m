@@ -3,7 +3,7 @@ addpath 'lme/lme_sp'
 addpath 'util'
 
 method = 'lme_sp';
-dataset = 'awa';
+dataset = 'pascal3d';
 
 param = getParam(method, dataset);
 
