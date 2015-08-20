@@ -55,7 +55,7 @@ function param = getPascal3dParam(method)
     
     if strcmp(method, 'lme_sp')
         param.numClasses = 12;
-        param.lowDim = 30;
+        param.lowDim = 12;
         param.featureDim = 9216;
         param.maxIterW = 1000;
         param.maxIterU = 1000;
