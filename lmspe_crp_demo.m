@@ -5,6 +5,8 @@ cd /v9/code/VisualTransfer
 addpath 'lme/lmspe_crp'
 addpath 'ddcrp'
 addpath 'util'
+addpath 'pgm'
+addpath 'pgm/RRWM'
 
 method = 'lmspe_crp';
 dataset = 'awa';

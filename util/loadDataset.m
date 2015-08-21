@@ -30,7 +30,19 @@ function DS = loadDataset(dataset)
         DS.DL = trL;
         DS.T = teF;
         DS.TL = teL;
+    elseif strcmp(dataset, 'coil100')
+        load('/v9/coil100/exp_dataset/trF.mat');
+        load('/v9/coil100/exp_dataset/teF.mat');
+        load('/v9/coil100/exp_dataset/trL.mat');
+        load('/v9/coil100/exp_dataset/teL.mat');
+
+        DS = {};
+        DS.D = trF;
+        DS.DL = trL;
+        DS.T = teF;
+        DS.TL = teL;
     else
+        
         tic;
         train_feat_dir = ['/v9/' dataset '/Features/train/'];
         [D D_labels] = loadFeatureData(train_feat_dir);
