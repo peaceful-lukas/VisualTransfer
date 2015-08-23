@@ -5,20 +5,20 @@ function DS = loadDataset(dataset)
 
         load('/v9/pascal3d/exp_dataset/trainset/features.mat');
         load('/v9/pascal3d/exp_dataset/trainset/labels.mat');
-        load('/v9/pascal3d/exp_dataset/trainset/images.mat');
+        % % load('/v9/pascal3d/exp_dataset/trainset/images.mat');
 
         load('/v9/pascal3d/exp_dataset/testset/features.mat');
         load('/v9/pascal3d/exp_dataset/testset/labels.mat');
-        load('/v9/pascal3d/exp_dataset/testset/images.mat');
+        % load('/v9/pascal3d/exp_dataset/testset/images.mat');
 
         DS = {};
         DS.dataset = 'pascal3d';
         DS.D = trF;
         DS.DL = trL;
-        DS.DI = trI;
+        % DS.DI = trI;
         DS.T = teF;
         DS.TL = teL;
-        DS.TI = teI;
+        %DS.TI = teI;
     elseif strcmp(dataset, '3dobj')
         load('/v9/3Ddataset/exp_dataset/trF.mat');
         load('/v9/3Ddataset/exp_dataset/teF.mat');

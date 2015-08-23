@@ -12,7 +12,7 @@ while n <= param.maxIterU
     pTriplets = sampleClusterPullingTriplets(DS, W, U, param);
     sTriplets = sampleStructurePreservingTriplets(DS, W, U, param);
 
-    dU = computeGradient(DS, W, U, cTriplets, pTriplets, sTriplets, param);
+    dU = computeGradient(DS, WX, U, cTriplets, pTriplets, sTriplets, aux, param);
     U = update(U, dU, param);
 
     if ~mod(n, dispCycle)
@@ -34,7 +34,7 @@ U = U - param.lr_U * dU;
 
 
 % gradient computation
-function dU = computeGradient(DS, W, U, cTriplets, pTriplets, sTriplets, param)
+function dU = computeGradient(DS, WX, U, cTriplets, pTriplets, sTriplets, aux, param)
 
 X = DS.D;
 num_cTriplets = size(cTriplets, 1);
