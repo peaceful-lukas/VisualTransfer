@@ -30,7 +30,7 @@ end
 % update
 function U = update(U, dU, param)
 
-U = U - param.learning_rate * dU;
+U = U - param.lr_U * dU;
 
 
 % gradient computation

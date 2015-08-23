@@ -27,7 +27,7 @@ end
 % update
 function W = update(W, dW, param)
 
-W = W - param.learning_rate * dW;
+W = W - param.lr_W * dW;
 
 
 
