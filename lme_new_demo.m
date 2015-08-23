@@ -60,8 +60,8 @@ while( n < param.maxAlter & iter_condition )
     prev_W = norm(W, 'fro');
     prev_U = norm(U, 'fro');
 
-    W = learnW_lmspe_crp(DS, W, U, param);
-    U = learnU_lmspe_crp(DS, W, U, param);
+    W = learnW_new(DS, W, U, param);
+    U = learnU_new(DS, W, U, param);
 
     [~, accuracy] = dispAccuracy(method, n+1, DS, W, U, param);
 
