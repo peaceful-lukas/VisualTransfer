@@ -1,4 +1,4 @@
-function [sTripltes knnGraphs] = generateStructurePreservingTriplets(P, param)
+function [sTriplets knnGraphs] = generateStructurePreservingTriplets(P, param)
 
 
 numClasses = param.numClasses;
