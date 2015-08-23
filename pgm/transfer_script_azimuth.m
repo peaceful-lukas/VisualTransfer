@@ -18,6 +18,16 @@ W = result{2};
 U = result{3};
 
 %%%%%%%%%% DO GRAPH MATCHING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+U_bicycle = U(:, 13:23);
+U_motorbike = U(:, 84:95);
+
+matchScores = U_bicycle'*U_motorbike;
+matchScores = sort(matchScores(:), 'descend');
+graphSize = min(param.numPrototypes(2), param.numPrototypes(9));
+match_thrsh = matchScores(graphSize);
+match_sim_thrsh = matchScores(2*graphSize);
+
 cd /v9/code/VisualTransfer/pgm
 addpath 'RRWM'
 param_gm.maxIterGM = 10;
@@ -26,9 +36,6 @@ param_gm.match_sim_thrsh = 0.05;
 param_gm.knn1 = 3;
 param_gm.knn2 = 4;
 param_gm.voting_alpha = 10;
-
-U_bicycle = U(:, 13:23);
-U_motorbike = U(:, 84:95);
 
 [X_sol, cand_matches] = progGM(U_bicycle, U_motorbike, param_gm);
 matched_pairs = cand_matches(find(X_sol), :);

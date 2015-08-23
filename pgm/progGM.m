@@ -1,4 +1,4 @@
-function [X_sol candidate_matches] = progressiveGraphMatching(U1, U2, param)
+function [X_sol candidate_matches score_GM] = progressiveGraphMatching(U1, U2, param)
 % revised Progressive Graph Matching
 % ( Graph matching after sp-LME )
 % 

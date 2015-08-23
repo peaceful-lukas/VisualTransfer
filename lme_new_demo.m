@@ -1,0 +1,79 @@
+cd /v9/code/VisualTransfer
+
+addpath 'lme/lme_new'
+addpath 'ddcrp'
+addpath 'util'
+
+method = 'lme_new';
+dataset = 'pascal3d';
+
+param = getParam(method, dataset);
+
+DS = loadDataset(param.dataset);
+
+% ddCRP clustering
+protoAssign = zeros(length(DS.DL), 1);
+numPrototypes = zeros(1, param.numClasses);
+classProtos = [];
+for c = 1:param.numClasses
+    X_c = DS.D(:, find(DS.DL == c));
+    D = conDstMat(X_c);
+    
+    numData_c = size(X_c, 2);
+    alpha = numData_c * 0.001;
+    a = mean(mean(D));
+    [ta, pa] = ddcrp(D, 'lgstc', alpha, a);
+    numPrototypes(c) = numel(unique(ta));
+    protoAssign(find(DS.DL == c)) = pa + sum(numPrototypes(1:c-1));
+
+    % centroids of each cluster by examining ta
+    for p = 1:numel(unique(ta))
+        classProtos = [classProtos mean(X_c(:, find(ta == p)), 2)];
+    end
+
+    fprintf('class %d clustering finished --> prototypes are set.\n', c);
+end
+
+%------ should be connected graphs. MUST BE CHECKED. -----------
+param.numPrototypes = numPrototypes;
+[sTriplets knnGraphs] = generateStructurePreservingTriplets(classProtos, param);
+param.sTriplets = sTriplets;
+param.knnGraphs = knnGraphs;
+param.protoAssign = protoAssign;
+param.pTriplets = generateClusterPullingTriplets(param.protoAssign, param.numPrototypes);
+
+
+[~, pca_score, ~] = pca(classProtos');
+U = pca_score(:, 1:param.lowDim)'; % approximate the original distributions of prototypes.
+U = normc(U);
+W = randn(param.lowDim, param.featureDim);
+W = W/norm(W, 'fro');
+
+
+n = 0;
+highest_acc = 0.6;
+iter_condition = 1;
+
+while( n < param.maxAlter & iter_condition )
+    fprintf('\n============================= Iteration %d =============================\n', n+1);
+
+    prev_W = norm(W, 'fro');
+    prev_U = norm(U, 'fro');
+
+    W = learnW_lmspe_crp(DS, W, U, param);
+    U = learnU_lmspe_crp(DS, W, U, param);
+
+    [~, accuracy] = dispAccuracy(method, n+1, DS, W, U, param);
+
+    if accuracy > highest_acc
+        saveResult(method, param.dataset, accuracy, {param, W, U, classProtos, accuracy});
+
+        highest_acc = accuracy;
+        fprintf('highest accuracy has been renewed. (acc = %.4f)\n', highest_acc);
+    end
+
+    iter_condition = sqrt((norm(W, 'fro') - prev_W)^2 +  (norm(U, 'fro') - prev_U)^2) > 0.000001;
+
+    n = n + 1;
+end
+

@@ -101,7 +101,7 @@ scoreMatrix = scoreMatrix + scoreMatrix';
 class_to_transfer = [];
 for n=1:length(cand_class)
     if cand_class(cand_class(n)) ~= n
-        class_to_transfer = [class_to_transfer; n class_to_transfer(n)];
+        class_to_transfer = [class_to_transfer; n cand_class(n)];
     end
 end
 fprintf('\n--------------------\n');
@@ -116,7 +116,6 @@ fprintf('\n');
 postfix = ceil(10000000*rand);
 save(sprintf('/v9/exp_results/graph_trasnfer_list_%d.mat', postfix), 'scoreMatrix');
 save(sprintf('/v9/exp_results/graph_trasnfer_list_%d.mat', postfix), 'class_to_transfer', '-append');
-save(sprintf('/v9/exp_results/graph_trasnfer_list_%d.mat', postfix), '', '-append');
 fprintf('graph transfer saved filename : %s\n', sprintf('/v9/exp_results/graph_trasnfer_list_%d.mat', postfix));
 
 % for n=1:size(class_to_transfer, 1)
