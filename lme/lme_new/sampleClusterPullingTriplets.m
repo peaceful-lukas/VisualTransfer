@@ -1,6 +1,7 @@
 function pTriplets = sampleClusterPullingTriplets(DS, W, U, param)
 % (i, k, l), the indices regard the actual permutation in U
 
+X = DS.D;
 num_pTriplets = size(param.pTriplets, 1);
 pTriplets = param.pTriplets;
 
