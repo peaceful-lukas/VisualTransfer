@@ -103,9 +103,9 @@ function param = getPascal3dParam(method)
         param.maxIterW = 1000;
         param.maxIterU = 1000;
         param.maxAlter = 50;
-        param.c_batchSize = 50;
-        param.p_batchSize = 50;
-        param.s_batchSize = 50;
+        param.c_batchSize = 1000;
+        param.p_batchSize = 1000;
+        param.s_batchSize = 1000;
         param.lowDim = 100;
         param.featureDim = 9216;
 
