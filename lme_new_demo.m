@@ -22,9 +22,9 @@ for c = 1:param.numClasses
     numData_c = size(X_c, 2);
     alpha = numData_c * 0.001;
     a = mean(mean(D));
-    [ta, pa] = ddcrp(D, 'lgstc', alpha, a);
+    [ta, ~] = ddcrp(D, 'lgstc', alpha, a);
     numPrototypes(c) = numel(unique(ta));
-    protoAssign(find(DS.DL == c)) = pa + sum(numPrototypes(1:c-1));
+    protoAssign(find(DS.DL == c)) = ta + sum(numPrototypes(1:c-1));
 
     % centroids of each cluster by examining ta
     for p = 1:numel(unique(ta))

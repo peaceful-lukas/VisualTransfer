@@ -3,7 +3,7 @@ function pTriplets = generateClusterPullingTriplets(protoAssign, numPrototypes)
 % (i, k, l), the indices regard the actual permutation in U
 pTriplets = [];
 numData = length(protoAssign);
-protoStartIdx = [0 cumsum(numPrototypes)] % protoStartIdx(n)+1:protoStartIdx(n+1)
+protoStartIdx = [0 cumsum(numPrototypes)]; % protoStartIdx(n)+1:protoStartIdx(n+1)
 
 for c=1:length(numPrototypes)
     protoIdx = protoStartIdx(c)+1:protoStartIdx(c+1);
