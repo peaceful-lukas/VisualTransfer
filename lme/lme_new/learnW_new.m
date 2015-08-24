@@ -50,4 +50,4 @@ if num_pTriplets > 0
     p_dW = p_dW/param.p_batchSize;
 end
 
-dW = c_dW + p_dW + param.lambda_W*W;
+dW = param.bal_c*c_dW + param.bal_p*p_dW + param.lambda_W*W;
