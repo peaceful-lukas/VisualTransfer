@@ -2,6 +2,7 @@ cd /v9/code/VisualTransfer
 
 addpath 'lme/lme_new'
 addpath 'ddcrp'
+addpath 'sc'
 addpath 'util'
 
 method = 'lme_new';
@@ -11,7 +12,56 @@ param = getParam(method, dataset);
 
 DS = loadDataset(param.dataset);
 
-% ddCRP clustering
+% % Spectral Clustering
+% protoAssign = zeros(length(DS.DL), 1);
+% classProtos = [];
+% param.numPrototypes = zeros(1, param.numClasses);
+
+% for c=1:param.numClasses
+
+%     % select the data in class c
+%     dataIdx_c = find(DS.DL == c);
+%     X_c = DS.D(:, dataIdx_c);
+
+%     % centralize and scale the data
+%     X_c = X_c - repmat(mean(X_c, 2), 1, size(X_c, 2));
+%     X_c = X_c/max(max(abs(X_c)));
+
+%     % build affinity matrices
+%     neighbor_num = 15;         %% Number of neighbors to consider in local scaling
+%     scale = 0.04;
+%     D_c = dist2(X_c', X_c');         %% Euclidean distance
+%     A = exp(-D/(scale^2));       %% Standard affinity matrix (single scale)
+    
+%     %% Zero out diagonal
+%     ZERO_DIAG = ~eye(size(X_c, 2));
+%     A = A.*ZERO_DIAG;
+
+%     %% spectral clustering
+%     clusts_STD = gcut(A, 10);
+
+
+
+
+%     [clusts_RLS, bestIdx, clu_score] = cluster_rotate(A_LS, CLUSTER_NUM_CHOICES);
+%     clust_info = clusts_RLS{bestIdx};
+%     numClusters = length(clust_info);
+    
+%     classProtos_c = zeros(size(X_c, 1), numClusters);
+%     for n=1:numClusters
+%         classProtos_c(:, n) = mean(X_c(:, clust_info{n}), 2);
+%         protoAssign(dataIdx_c(clust_info{n})) = sum(param.numPrototypes(1:c-1)) + n;
+%     end
+%     classProtos = [classProtos classProtos_c];
+
+%     param.numPrototypes(c) = numClusters;
+
+%     fprintf('class %d clustering finished ( # of clusters = %d )\n', c, numClusters);
+% end
+
+
+
+% % ddCRP clustering
 protoAssign = zeros(length(DS.DL), 1);
 numPrototypes = zeros(1, param.numClasses);
 classProtos = [];
@@ -31,13 +81,13 @@ for c = 1:param.numClasses
         classProtos = [classProtos mean(X_c(:, find(ta == p)), 2)];
     end
 
-    fprintf('class %d clustering finished --> prototypes are set.\n', c);
+    fprintf('class %d clustering finished ( # of clusters = %d )\n', c, numPrototypes(c));
 end
 
-%------ should be connected graphs. MUST BE CHECKED. -----------
+% ------ should be connected graphs. MUST BE CHECKED. -----------
 param.numPrototypes = numPrototypes;
 param.cTriplets = generateClassificationTriplets(DS, param);
-param.pTriplets = generateClusterPullingTriplets(param.protoAssign, param.numPrototypes);
+param.pTriplets = generateClusterPullingTriplets(protoAssign, param.numPrototypes);
 [param.sTriplets knnGraphs] = generateStructurePreservingTriplets(classProtos, param);
 param.knnGraphs = knnGraphs;
 param.protoAssign = protoAssign;
