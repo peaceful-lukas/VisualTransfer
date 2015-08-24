@@ -40,14 +40,14 @@ num_pTriplets = size(pTriplets, 1);
 
 c_dW = zeros(size(W));
 if num_cTriplets > 0
-    % c_dW = (U(:, cTriplets(:, 3)) - U(:, cTriplets(:, 2))) * X(:, cTriplets(:, 1))';
-    % c_dW = c_dW/param.c_batchSize;
-
-    c_dW_cell = arrayfun(@(n) (U(:, cTriplets(n, 3)) - U(:, cTriplets(n, 2)))*X(:, cTriplets(n, 1))', 1:num_cTriplets, 'UniformOutput', false);
-    c_dW_cat = cat(3, c_dW_cell{:});
-    c_dW = sum(c_dW_cat, 3);
-    
+    c_dW = (U(:, cTriplets(:, 3)) - U(:, cTriplets(:, 2))) * X(:, cTriplets(:, 1))';
     c_dW = c_dW/param.c_batchSize;
+
+    % c_dW_cell = arrayfun(@(n) (U(:, cTriplets(n, 3)) - U(:, cTriplets(n, 2)))*X(:, cTriplets(n, 1))', 1:num_cTriplets, 'UniformOutput', false);
+    % c_dW_cat = cat(3, c_dW_cell{:});
+    % c_dW = sum(c_dW_cat, 3);
+    
+    % c_dW = c_dW/param.c_batchSize;
 end
 
 p_dW = zeros(size(W));
