@@ -103,7 +103,7 @@ function param = getPascal3dParam(method)
         param.maxIterW = 1000;
         param.maxIterU = 1000;
         param.maxAlter = 50;
-        param.c_batchSize = 100;
+        param.c_batchSize = 1000;
         param.p_batchSize = 100;
         param.s_batchSize = 100;
         param.lowDim = 150;
@@ -117,7 +117,7 @@ function param = getPascal3dParam(method)
         param.lambda_U = 1; % regularizer coefficient
         param.lr_W = 0.00001; % learning rate for W
         param.lr_U = 0.00001; % learning rate for U
-        param.bal_c = 3;
+        param.bal_c = 1;
         param.bal_p = 1;
         param.bal_s = 1;
     end
