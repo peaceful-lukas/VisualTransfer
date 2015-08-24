@@ -36,11 +36,11 @@ end
 
 %------ should be connected graphs. MUST BE CHECKED. -----------
 param.numPrototypes = numPrototypes;
-[sTriplets knnGraphs] = generateStructurePreservingTriplets(classProtos, param);
-param.sTriplets = sTriplets;
+param.cTriplets = generateClassificationTriplets(DS, param);
+param.pTriplets = generateClusterPullingTriplets(param.protoAssign, param.numPrototypes);
+[param.sTriplets knnGraphs] = generateStructurePreservingTriplets(classProtos, param);
 param.knnGraphs = knnGraphs;
 param.protoAssign = protoAssign;
-param.pTriplets = generateClusterPullingTriplets(param.protoAssign, param.numPrototypes);
 
 
 [~, pca_score, ~] = pca(classProtos');

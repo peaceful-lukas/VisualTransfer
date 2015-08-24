@@ -10,18 +10,17 @@ for c=1:length(numPrototypes)
     dataIdx = find(protoAssign >= protoIdx(1) & protoAssign <= protoIdx(end));
     numProtoIdx = length(protoIdx);
     numDataIdx = length(dataIdx);
-    pTriplets_c = zeros(numDataIdx*(numProtoIdx-1), 3);
-
+    
     numTripletsPerData = numProtoIdx-1;
+    pTriplets_c = zeros(numDataIdx*numTripletsPerData, 3);
     for i=1:numDataIdx
         incorr = 1:numProtoIdx;
         incorr(find(protoAssign(dataIdx(i)))) = [];
-        pTriplets_c((i-1)*numTripletsPerData+1:i*numTripletsPerData, :) = zeros(numTripletsPerData, 3);
         pTriplets_c((i-1)*numTripletsPerData+1:i*numTripletsPerData, 1) = dataIdx(i);
         pTriplets_c((i-1)*numTripletsPerData+1:i*numTripletsPerData, 2) = protoAssign(dataIdx(i));
         pTriplets_c((i-1)*numTripletsPerData+1:i*numTripletsPerData, 3) = incorr;
     end
-
+    
     pTriplets = [pTriplets; pTriplets_c];
 end
 
