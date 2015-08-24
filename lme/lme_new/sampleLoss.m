@@ -10,30 +10,39 @@ num_pTriplets = size(pTriplets, 1);
 num_sTriplets = size(sTriplets, 1);
 
 cErr = 0;
+num_cV = 0;
 if num_cTriplets > 0
     cErr_vec = diag((W*X(:, cTriplets(:, 1)))' * (U(:, cTriplets(:, 3)) - U(:, cTriplets(:, 2))));
     viol = find(cErr_vec > 0);
     num_cV = length(viol);
 
-    cErr = param.c_lm + sum(cErr_vec(viol));
+    if viol > 0
+        cErr = param.c_lm + sum(cErr_vec(viol));
+    end
 end
 
 pErr = 0;
+num_pV = 0;
 if num_pTriplets > 0
-   pErr_vec = diag((W*X(:, pTriplets(:, 1)))' * (U(:, pTriplets(:, 3)) - U(:, pTriplets(:, 2))));
-   viol = find(pErr_vec > 0);
-   num_pV = length(viol);
+    pErr_vec = diag((W*X(:, pTriplets(:, 1)))' * (U(:, pTriplets(:, 3)) - U(:, pTriplets(:, 2))));
+    viol = find(pErr_vec > 0);
+    num_pV = length(viol);
 
-   pErr = param.p_lm + sum(pErr_vec(viol));
+    if viol > 0
+        pErr = param.p_lm + sum(pErr_vec(viol));
+    end
 end
 
 sErr = 0;
+num_sV = 0;
 if num_sTriplets > 0
     sErr_vec = diag( U(:, sTriplets(:, 1))' * (U(:, sTriplets(:, 3)) - U(:, sTriplets(:, 2))) );
     viol = find(sErr_vec > 0);
     num_sV = length(viol);
 
-    sErr = param.s_lm + sum(sErr_vec(viol));
+    if viol > 0
+        sErr = param.s_lm + sum(sErr_vec(viol));
+    end
 end
 
 loss = cErr + pErr + sErr + param.lambda_W*0.5*norm(W, 'fro')^2 + param.lambda_U*0.5*norm(U, 'fro')^2;
