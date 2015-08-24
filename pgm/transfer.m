@@ -47,7 +47,7 @@ for c = 1:param.numClasses
     classified(t) = c;
     classified_raw(t) = Inf;
 end
-orig_acc = numel(find(DS.TL == classified))/numel(DS.TL);
+orig_acc = numel(find(DS.TL == c2))/numel(DS.TL);
 fprintf('ORIGINAL accuracy for class %d: %f\n', c2, orig_acc);
 
 
@@ -61,7 +61,7 @@ for c = 1:param.numClasses
     classified(t) = c;
     classified_raw(t) = Inf;
 end
-new_acc = numel(find(DS.TL == classified))/numel(DS.TL);
+new_acc = numel(find(DS.TL == c2))/numel(DS.TL);
 fprintf('TRANSFERRED accuracy for class %d: %f\n', c2, new_acc);
 
 
