@@ -26,7 +26,7 @@ numMatched = size(matched_pairs, 1);
 
 
 %%%%%% Transfer (c1 --> c2)
-transferred_prototype = zeros(200, 1);
+transferred_prototype = zeros(param.lowDim, 1);
 for n=1:numMatched
     transferred_prototype = transferred_prototype + U_c2(:, matched_pairs(n, 2)) - U_c1(:, matched_pairs(n, 1)) + U_c1(:, target);
 end
