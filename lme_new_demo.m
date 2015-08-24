@@ -4,6 +4,8 @@ addpath 'lme/lme_new'
 addpath 'ddcrp'
 addpath 'sc'
 addpath 'util'
+addpath 'pgm'
+addpath 'pgm/RRWM'
 
 method = 'lme_new';
 dataset = 'pascal3d';
