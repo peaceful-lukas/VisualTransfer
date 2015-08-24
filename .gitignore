@@ -2,7 +2,9 @@
 .DS_Store
 *.mexa64
 *.mexa32
+*.mexglx
 *.mexw64
 *.mexw32
 *.mexmaci64
+*.zip
 
