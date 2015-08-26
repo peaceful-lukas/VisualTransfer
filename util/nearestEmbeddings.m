@@ -13,7 +13,7 @@ for n=1:param.numPrototypes(classNum)
         fprintf('\n');
         pause;
     else
-        fprintf(': %d\n', idx(1));
+        fprintf(': %6d%6d%6d%6d%6d\n', idx(1), idx(2), idx(3), idx(4), idx(5));
     end
 end
 
