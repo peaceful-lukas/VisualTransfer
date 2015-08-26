@@ -1,4 +1,4 @@
-function [U_new U new_numPrototypes] = transfer(DS, W, U, c1, c2, target, scale_alpha, param)
+function [U_new U new_numPrototypes matched_pairs] = transfer(DS, W, U, c1, c2, target, scale_alpha, param)
 
 % target : the prototype in class 'c1'
 
