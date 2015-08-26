@@ -8,7 +8,7 @@ addpath 'pgm'
 addpath 'pgm/RRWM'
 
 method = 'lme_new';
-dataset = 'pascal3d_imagenet';
+dataset = 'pascal3d_all';
 
 param = getParam(method, dataset);
 
