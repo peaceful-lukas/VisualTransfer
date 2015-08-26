@@ -6,7 +6,7 @@ function param = getParam(method, dataset)
             param = getPascalParam(method);
 
         case 'pascal3d_all'
-            param.getPascal3dAllParam(method);
+            param = getPascal3dAllParam(method);
         
         case 'pascal3d_imagenet'
             param = getPascal3dImagenetParam(method);
