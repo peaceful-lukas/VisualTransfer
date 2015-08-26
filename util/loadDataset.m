@@ -1,6 +1,24 @@
 function DS = loadDataset(dataset)
 
-    if strcmp(dataset, 'pascal3d')
+    if strcmp(dataset, 'pascal3d_all')
+        fprintf('WARNING) PASCAL3D+ DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
+
+        load('/v9/pascal3d/exp_dataset_all/rem_trainset/trF.mat');
+        load('/v9/pascal3d/exp_dataset_all/rem_trainset/trL.mat');
+        load('/v9/pascal3d/exp_dataset_all/rem_trainset/trB.mat');
+
+        load('/v9/pascal3d/exp_dataset_all/rem_testset/teF.mat');
+        load('/v9/pascal3d/exp_dataset_all/rem_testset/teL.mat');
+        load('/v9/pascal3d/exp_dataset_all/rem_testset/teB.mat');
+
+        DS = {};
+        DS.D = trF;
+        DS.DL = trL;
+        DS.DA = trB;
+        DS.T = teF;
+        DS.TL = teL;
+        DS.TA = teB;
+    elseif strcmp(dataset, 'pascal3d_imagenet')
         fprintf('WARNING) PASCAL3D+ DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
 
         load('/v9/pascal3d/exp_dataset/trainset/features.mat');
@@ -12,7 +30,6 @@ function DS = loadDataset(dataset)
         % load('/v9/pascal3d/exp_dataset/testset/images.mat');
 
         DS = {};
-        DS.dataset = 'pascal3d';
         DS.D = trF;
         DS.DL = trL;
         % DS.DI = trI;
@@ -58,7 +75,6 @@ function DS = loadDataset(dataset)
         toc
 
         DS = {};
-        DS.dataset = dataset;
         DS.D = D;
         DS.DL = D_labels;
         %DS.DI = DI;

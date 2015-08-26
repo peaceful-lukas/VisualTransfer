@@ -14,7 +14,7 @@ addpath 'ddcrp'
 addpath 'util'
 
 method = 'lmspe_crp';
-dataset = 'pascal3d';
+dataset = 'pascal3d_imagenet';
 
 param = getParam(method, dataset);
 param.lowDim = 100;

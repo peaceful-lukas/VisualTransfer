@@ -3,7 +3,7 @@ addpath 'lme/lme_sp'
 addpath 'util'
 
 method = 'lme_sp';
-dataset = 'pascal3d';
+dataset = 'pascal3d_imagenet';
 
 param = getParam(method, dataset);
 
