@@ -1,7 +1,7 @@
 function DS = loadDataset(dataset)
 
     if strcmp(dataset, 'pascal3d_all')
-        fprintf('WARNING) PASCAL3D+ DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
+        fprintf('PASCAL3D+ FULL DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
 
         load('/v9/pascal3d/exp_dataset_all/rem_trainset/trF.mat');
         load('/v9/pascal3d/exp_dataset_all/rem_trainset/trL.mat');
