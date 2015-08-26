@@ -63,19 +63,19 @@ end
 function param = getPascal3dAllParam(method)
     
     if strcmp(method, 'lme_sp')
-        % param.numClasses = 12;
-        % param.lowDim = 12;
-        % param.featureDim = 9216;
-        % param.maxIterW = 1000;
-        % param.maxIterU = 1000;
-        % param.maxAlter = 20;
-        % param.batchSize = 50; % mini-batch size
+        param.numClasses = 12;
+        param.lowDim = 12;
+        param.featureDim = 9216;
+        param.maxIterW = 1000;
+        param.maxIterU = 1000;
+        param.maxAlter = 20;
+        param.batchSize = 50; % mini-batch size
 
-        % param.lr_W = 0.0001; % learning rate for W
-        % param.lr_U = 0.00001; % learning rate for U
-        % param.lm = 10; % large margin for classification
-        % param.lambda_W = 100; % regularizer coefficient
-        % param.lambda_U = 100; % regularizer coefficient
+        param.lr_W = 0.0001; % learning rate for W
+        param.lr_U = 0.00001; % learning rate for U
+        param.lm = 10; % large margin for classification
+        param.lambda_W = 100; % regularizer coefficient
+        param.lambda_U = 100; % regularizer coefficient
 
     elseif strcmp(method, 'lmspe')
 
