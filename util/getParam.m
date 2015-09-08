@@ -114,15 +114,15 @@ function param = getPascal3dAllParam(method)
         param.featureDim = 9216;
 
         param.knn_const = 3; % constant for constructing k-nn graph.
-        param.c_lm = 100; % large margin for classification
-        param.p_lm = 10; % large margin for classification
-        param.s_lm = 5; % large margin for structure preserving
-        param.lambda_W = 0.1; % regularizer coefficient
-        param.lambda_U = 1; % regularizer coefficient
-        param.lr_W = 0.00001; % learning rate for W
-        param.lr_U = 0.00001; % learning rate for U
+        param.c_lm = 200; % large margin for classification
+        param.p_lm = 20; % large margin for classification
+        param.s_lm = 10; % large margin for structure preserving
+        param.lambda_W = 0.001; % regularizer coefficient
+        param.lambda_U = 0.01; % regularizer coefficient
+        param.lr_W = 0.0001; % learning rate for W
+        param.lr_U = 0.0001; % learning rate for U
         param.bal_c = 1;
-        param.bal_p = 1;
+        param.bal_p = 100;
         param.bal_s = 10;
     end
 

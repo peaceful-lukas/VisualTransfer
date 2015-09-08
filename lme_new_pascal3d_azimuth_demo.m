@@ -28,7 +28,7 @@ for c = 1:param.numClasses
         if length(azi_idx) > 0
             classProtos = [classProtos mean(X_c(:, azi_idx), 2)];
             numPrototypes(c) = numPrototypes(c) + 1;
-            protoAssign(class_idx(azi_idx)) = sum(numPrototypes) + 1;
+            protoAssign(class_idx(azi_idx)) = sum(numPrototypes);
         end
     end
 
@@ -52,7 +52,7 @@ W = W/norm(W, 'fro');
 
 
 n = 0;
-highest_acc = 0.6;
+highest_acc = 0.7;
 iter_condition = 1;
 
 while( n < param.maxAlter & iter_condition )
