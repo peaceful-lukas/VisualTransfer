@@ -83,7 +83,7 @@ for i=1:length(matched)
     end
 end
 
-A2_new(n+1:end, n+1:end) = A1([unmatched unmatched]);
+A2_new(n+1:end, n+1:end) = A1(unmatched, unmatched);
 
 param_new.knnGraphs{c2} = A2_new;
 
