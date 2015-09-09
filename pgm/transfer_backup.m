@@ -30,28 +30,22 @@ fprintf('\n\nTARGET : %d\n', target);
 fprintf('    c1    c2  \n  ------------\n');
 disp(matched_pairs);
 
-
-
-%%%%%% Transfer (c1 --> c2)
-new_numPrototypes = param.numPrototypes;
-
 unmatched = 1:numPrototypes(c1);
 unmatched(matched_pairs(:, 1)) = [];
 
-transferred_prototypes = [];
-for um_idx=1:length(unmatched)
-    target = unmatched(um_idx);
-    transferred = zeros(param.lowDim, 1);
-    for n=1:numMatched
-        transferred = transferred + scale_alpha*U_c2(:, matched_pairs(n, 2)) - U_c1(:, matched_pairs(n, 1)) + U_c1(:, target);
-    end
-    transferred = transferred/numMatched;
-    transferred_prototypes = [transferred_prototypes transferred];
+
+
+%%%%%% Transfer (c1 --> c2)
+transferred_prototype = zeros(param.lowDim, 1);
+for n=1:numMatched
+    transferred_prototype = transferred_prototype + scale_alpha*U_c2(:, matched_pairs(n, 2)) - U_c1(:, matched_pairs(n, 1)) + U_c1(:, target);
 end
+transferred_prototype = transferred_prototype/numMatched;
 
-U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
-new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
+U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototype U(:, sum(param.numPrototypes(1:c2))+1:end)];
 
+new_numPrototypes = param.numPrototypes;
+new_numPrototypes(c2) = new_numPrototypes(c2) + 1;
 
 %%%%%% Disp Accuracy
 
