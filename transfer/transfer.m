@@ -53,8 +53,8 @@ end
 % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
 
-dispAccuracies(DS, W, U, U_new, new_numPrototypes, param);
-trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param);
+dispAccuracies(DS, W, U, U_new, param_new.numPrototypes, param);
+trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, param_new.numPrototypes, param);
 
 
 
@@ -65,8 +65,8 @@ function [U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2,
 % 1. add transferred prototypes into U
 % 2. update the number of prototypes of the class
 % 3. update the knn-graph of the class
-
-U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
+protoStartIdx = [0 cumsum(param.numPrototypes)];
+U_new = [U(:, 1:protoStartIdx(c2+1) transferred_prototypes U(:, protoStartIdx(c2+1)+1:end)];
 
 param_new = param;
 param_new.numPrototypes(c2) = param.numPrototypes(c2) + length(unmatched);
