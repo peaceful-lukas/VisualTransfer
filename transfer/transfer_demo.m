@@ -35,7 +35,6 @@ scale_alpha = 1.1;
 for i=1:size(transferPairs, 1)
     c1 = transferPairs(i, 1);
     c2 = transferPairs(i, 2);
-    scale_alpha = 1;
 
     [U_new, param_new, ~, matched_pairs, trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param);
 
