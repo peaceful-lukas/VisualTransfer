@@ -34,7 +34,7 @@ numMatched = size(matched_pairs, 1);
 %%%%%% Transfer (c1 --> c2)
 new_numPrototypes = param.numPrototypes;
 
-unmatched = 1:numPrototypes(c1);
+unmatched = 1:param.numPrototypes(c1);
 unmatched(matched_pairs(:, 1)) = [];
 
 transferred_prototypes = [];
