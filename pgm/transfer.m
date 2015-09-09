@@ -52,6 +52,7 @@ U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(
 new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
 
+dispAccuracies(DS, W, U, U_new, new_numPrototypes, param);
 trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param);
 
 
@@ -69,6 +70,18 @@ for cls = 1:param.numClasses
         trainTargetClasses = [trainTargetClasses; cls];
     end
 end
+
+
+
+
+function dispAccuracies(DS, W, U, U_new, new_numPrototypes, param)
+
+for cls = 1:param.numClasses
+    orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
+    new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param);
+    fprintf('Accuracy (class %d) : %.4f ----> %.4f\n', cls, orig_acc, new_acc);    
+end
+
 
 
 
