@@ -26,9 +26,8 @@ param_gm.voting_alpha = 10;
 matched_pairs = cand_matches(find(X_sol), :);
 numMatched = size(matched_pairs, 1);
 
-fprintf('\n\nTARGET : %d\n', target);
-fprintf('    c1    c2  \n  ------------\n');
-disp(matched_pairs);
+% fprintf('    c1    c2  \n  ------------\n');
+% disp(matched_pairs);
 
 
 
