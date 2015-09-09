@@ -1,4 +1,4 @@
-function [U_new U new_numPrototypes trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param)
+function [U_new param_new U matched_pairs trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -48,18 +48,51 @@ for um_idx=1:length(unmatched)
     transferred_prototypes = [transferred_prototypes transferred];
 end
 
-U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
-new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
+[U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched, unmatched, param);
+% U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
+% new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
 
 dispAccuracies(DS, W, U, U_new, new_numPrototypes, param);
 trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param);
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched, unmatched, param)
+% 1. add transferred prototypes into U
+% 2. update the number of prototypes of the class
+% 3. update the knn-graph of the class
+
+U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
+
+param_new = param;
+param_new.numPrototypes(c2) = param.numPrototypes(c2) + size(transferred_prototypes, 2);
 
 
+A1 = param.knnGraphs{c1};
+A2 = param.knnGraphs{c2};
+A2_new = zeros(size(A2, 1)+length(unmatched));
+A2_new(1:size(A2, 1), 1:size(A2, 1)) = A2;
+
+n = size(A2, 1);
+for i=1:length(matched)
+    for j=1:length(unmatched)
+        if A1(matched(i, 1), unmatched(j)) == 1
+            A2_new(matched(i, 2), n+j) = 1;
+        end
+    end
+end
+
+A2_new(n+1:end, n+1:end) = A1([unmatched unmatched]);
+
+param_new.knnGraphs{c2} = A2_new;
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param)
-
 trainTargetClasses = [];
 for cls = 1:param.numClasses
     orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
@@ -73,19 +106,20 @@ end
 
 
 
-
-function dispAccuracies(DS, W, U, U_new, new_numPrototypes, param)
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function acc_list = dispAccuracies(DS, W, U, U_new, new_numPrototypes, param)
+acc_list = [];
 for cls = 1:param.numClasses
     orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
     new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param);
+    acc_list = [acc_list; orig_acc new_acc];
     fprintf('Accuracy (class %d) : %.4f ----> %.4f\n', cls, orig_acc, new_acc);    
 end
 
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function orig_acc = getOriginalAccuracy(cls, DS, W, U, param)
 
 % %%%%%% Disp Accuracy
@@ -104,7 +138,7 @@ orig_acc = numel(find(classified == cls))/numel(find(DS.TL == cls));
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param)
 
 cumNumProto = cumsum(new_numPrototypes);

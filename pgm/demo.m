@@ -16,21 +16,21 @@ matched_pairs = cand_matches(find(X_sol), :);
 
 
 
-%-------------------- Subgraph Transfer --------------------
-numMatched = size(matched_pairs, 1);
-uniq_p1 = unique(matched_pairs(:, 1));
-uniq_p2 = unique(matched_pairs(:, 2));
+% %-------------------- Subgraph Transfer --------------------
+% numMatched = size(matched_pairs, 1);
+% uniq_p1 = unique(matched_pairs(:, 1));
+% uniq_p2 = unique(matched_pairs(:, 2));
 
-%--- Transfer from U1 to U2 ---
-not_matched_p1 = 1:10;
-not_matched_p1(uniq_p1) = [];
+% %--- Transfer from U1 to U2 ---
+% not_matched_p1 = 1:10;
+% not_matched_p1(uniq_p1) = [];
 
-randIdx = randi(numel(not_matched_p1));
-targetTransferIdx = not_matched_p1(randIdx);
+% randIdx = randi(numel(not_matched_p1));
+% targetTransferIdx = not_matched_p1(randIdx);
 
-transferred_prototype = zeros(100, 1);
-for n=1:numMatched
-    transferred_prototype = transferred_prototype + U2(:, matched_pairs(n, 2)) - U1(:, matched_pairs(n, 1)) + U1(:, targetTransferIdx);
-end
-transferred_prototype = transferred_prototype/numMatched;
+% transferred_prototype = zeros(100, 1);
+% for n=1:numMatched
+%     transferred_prototype = transferred_prototype + U2(:, matched_pairs(n, 2)) - U1(:, matched_pairs(n, 1)) + U1(:, targetTransferIdx);
+% end
+% transferred_prototype = transferred_prototype/numMatched;
 
