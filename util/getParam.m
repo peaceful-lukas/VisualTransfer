@@ -7,6 +7,9 @@ function param = getParam(method, dataset)
 
         case 'pascal3d_all'
             param = getPascal3dAllParam(method);
+
+        case 'pascal3d_pascal'
+            param = getPascal3dPascalParam(method);
         
         case 'pascal3d_imagenet'
             param = getPascal3dImagenetParam(method);
@@ -61,6 +64,74 @@ end
 
 
 function param = getPascal3dAllParam(method)
+    
+    if strcmp(method, 'lme_sp')
+        param.numClasses = 12;
+        param.lowDim = 12;
+        param.featureDim = 9216;
+        param.maxIterW = 1000;
+        param.maxIterU = 1000;
+        param.maxAlter = 20;
+        param.batchSize = 50; % mini-batch size
+
+        param.lr_W = 0.0001; % learning rate for W
+        param.lr_U = 0.00001; % learning rate for U
+        param.lm = 10; % large margin for classification
+        param.lambda_W = 100; % regularizer coefficient
+        param.lambda_U = 100; % regularizer coefficient
+
+    elseif strcmp(method, 'lmspe')
+
+    elseif strcmp(method, 'lmspe_crp')
+        % SAMPLE
+        param.numClasses = 12;
+        param.maxIterW = 1000;
+        param.maxIterU = 1000;
+        param.maxAlter = 50;
+        param.batchSize = 10; % mini-batch size
+        param.lowDim = 200;
+        param.featureDim = 9216;
+
+        param.knn_const = 3; % constant for constructing k-nn graph.
+        param.c_lm = 10; % large margin for classification
+        param.sp_lm = 0.01; % large margin for structure preserving
+        param.lambda_W = 100000; % regularizer coefficient
+        param.lambda_U = 1000; % regularizer coefficient
+        param.alpha = 5; % softmax parameter.
+        param.lr_W = 0.00001; % learning rate for W
+        param.lr_U = 0.00001; % learning rate for U
+        param.bal_c = 1;
+        param.bal_sp = 10;
+
+    elseif strcmp(method, 'lmspe_le')
+
+    elseif strcmp(method, 'lme_new')
+        param.numClasses = 12;
+        param.maxIterW = 1000;
+        param.maxIterU = 1000;
+        param.maxAlter = 50;
+        param.c_batchSize = 100;
+        param.p_batchSize = 100;
+        param.s_batchSize = 100;
+        param.lowDim = 80;
+        param.featureDim = 9216;
+
+        param.knn_const = 3; % constant for constructing k-nn graph.
+        param.c_lm = 200; % large margin for classification
+        param.p_lm = 20; % large margin for classification
+        param.s_lm = 10; % large margin for structure preserving
+        param.lambda_W = 0.001; % regularizer coefficient
+        param.lambda_U = 0.01; % regularizer coefficient
+        param.lr_W = 0.0001; % learning rate for W
+        param.lr_U = 0.0001; % learning rate for U
+        param.bal_c = 1;
+        param.bal_p = 100;
+        param.bal_s = 10;
+    end
+
+end
+
+function param = getPascal3dPascalParam(method)
     
     if strcmp(method, 'lme_sp')
         param.numClasses = 12;

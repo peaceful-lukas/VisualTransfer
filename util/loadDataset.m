@@ -21,6 +21,29 @@ function DS = loadDataset(dataset)
         DS.TL = teL;
         DS.TA = teA;
         DS.TB = teB;
+
+    elseif strcmp(dataset, 'pascal3d_pascal')
+        fprintf('PASCAL3D+ PASCAL SUBSET DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
+        load('/v9/PASCAL3D/pascal/proc/trF.mat');
+        load('/v9/PASCAL3D/pascal/proc/trL.mat');
+        load('/v9/PASCAL3D/pascal/proc/trA.mat');
+        load('/v9/PASCAL3D/pascal/proc/trB.mat');
+
+        load('/v9/PASCAL3D/pascal/proc/teF.mat');
+        load('/v9/PASCAL3D/pascal/proc/teL.mat');
+        load('/v9/PASCAL3D/pascal/proc/teA.mat');
+        load('/v9/PASCAL3D/pascal/proc/teB.mat');
+
+        DS = {};
+        DS.D = trF;
+        DS.DL = trL;
+        DS.DA = trA;
+        DS.DB = trB;
+        DS.T = teF;
+        DS.TL = teL;
+        DS.TA = teA;
+        DS.TB = teB;
+
     elseif strcmp(dataset, 'pascal3d_imagenet')
         fprintf('WARNING) PASCAL3D+ DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
 
