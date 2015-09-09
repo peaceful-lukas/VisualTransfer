@@ -40,7 +40,7 @@ for i=1:size(transferPairs, 1)
 
 
     % Locally train
-    [W U] = local_train(DS, W, U_new, param_new, trainTargetClasses);
+    U_retrained = local_train(DS, W, U_new, param_new, trainTargetClasses);
 
     % update
     param = param_new;
