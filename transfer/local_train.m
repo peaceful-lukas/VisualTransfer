@@ -1,5 +1,42 @@
-function [W U] = local_train(DS, W, U, trainTargetClasses, param)
+function U_retrained = local_train(DS, W, U_new, param_new, trainTargetClasses)
 
-U = learnU_new(DS, W, U, param);
-[~, accuracy] = dispAccuracy(method, n+1, DS, W, U, param);
+sTriplets_local = localStructurePreservingTriplets(param_new, trainTargetClasses);
+param_new.sTriplets = sTriplets_local;
+
+U_retrained = learnU_new(DS, W, U_new, param_new);
+[~, accuracy] = dispAccuracy(method, 0, DS, W, U_retrained, param_new);
+
+
+
+function sTriplets_local = localStructurePreservingTriplets(param_new, trainTargetClasses)
+
+    startProtoIdx = [0 cumsum(param_new.numPrototypes)];
+    sTriplets_local = [];
+
+    for i=1:length(trainTargetClasses)
+        cls = trainTargetClasses(i);
+        protoOffset = startProtoIdx(cls);
+
+        A = param_new.knnGraphs{cls};
+        
+        for j=1:length(size(A, 2))
+            neighbors = find(A(:, j) == 1);
+            non_neighbors = find(A(:, j) == 0);
+            non_neighbors(find(non_neighbors == j)) = [];
+
+            neighbors = neighbors + protoOffset;
+            non_neighbors = non_neighbors + protoOffset;
+            
+            sTriplets_local_j = zeros(numel(neighbors) * numel(non_neighbors), 3);
+
+            tmp_sec_col = repmat(neighbors, numel(non_neighbors), 1);
+
+            sTriplets_local_j(:, 1) = repmat(protoOffset+j, numel(neighbors) * numel(non_neighbors), 1);
+            sTriplets_local_j(:, 2) = tmp_sec_col(:);
+            sTriplets_local_j(:, 3) = repmat(non_neighbors, numel(neighbors), 1);
+
+            sTriplets_local = [sTriplets_local; sTriplets_local_j];
+        end
+    end
+end
 
