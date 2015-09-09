@@ -21,7 +21,7 @@ classProtos = [];
 for c = 1:param.numClasses
     class_idx = find(DS.DL == c);
     X_c = DS.D(:, class_idx);
-    tr_azimuth_c = DS.DA(class_idx);
+    tr_azimuth_c = DS.DB(class_idx);
     
     for azi=1:12
         azi_idx = find(tr_azimuth_c == azi);
