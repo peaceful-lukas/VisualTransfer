@@ -27,15 +27,17 @@ for i=1:length(trainTargetClasses)
         neighbors = neighbors + protoOffset;
         non_neighbors = non_neighbors + protoOffset;
         
-        sTriplets_local_j = zeros(numel(neighbors) * numel(non_neighbors), 3);
+        num_sTriplets_local_j = numel(neighbors) * numel(non_neighbors);
+        
+        if num_sTriplets_local_j > 0
+            sTriplets_local_j = zeros(num_sTriplets_local_j, 3);
 
-        tmp_sec_col = repmat(neighbors, numel(non_neighbors), 1);
+            sTriplets_local_j(:, 1) = repmat(protoOffset+j, num_sTriplets_local_j, 1);
+            sTriplets_local_j(:, 2) = repmat(neighbors, numel(non_neighbors), 1);
+            sTriplets_local_j(:, 3) = repmat(non_neighbors, numel(neighbors), 1);
 
-        sTriplets_local_j(:, 1) = repmat(protoOffset+j, numel(neighbors) * numel(non_neighbors), 1);
-        sTriplets_local_j(:, 2) = tmp_sec_col(:);
-        sTriplets_local_j(:, 3) = repmat(non_neighbors, numel(neighbors), 1);
-
-        sTriplets_local = [sTriplets_local; sTriplets_local_j];
+            sTriplets_local = [sTriplets_local; sTriplets_local_j];
+        end
     end
 end
 
