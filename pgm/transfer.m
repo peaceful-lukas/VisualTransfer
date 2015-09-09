@@ -62,7 +62,7 @@ function trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_
 trainTargetClasses = [];
 for cls = 1:param.numClasses
     orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
-    new_acc = getNewAccuracy(cls, D, W, U_new, new_numPrototypes, param);
+    new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param);
     if new_acc == orig_acc
         continue;
     else
