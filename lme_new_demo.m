@@ -70,9 +70,10 @@ classProtos = [];
 for c = 1:param.numClasses
     X_c = DS.D(:, find(DS.DL == c));
     D = conDstMat(X_c);
+    D = D./max(max(D));
     
     numData_c = size(X_c, 2);
-    alpha = numData_c * 0.01;
+    alpha = numData_c * 0.001;
     a = mean(mean(D));
     [ta, ~] = ddcrp(D, 'lgstc', alpha, a);
     numPrototypes(c) = numel(unique(ta));
