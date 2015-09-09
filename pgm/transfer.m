@@ -1,4 +1,4 @@
-function [U_new U new_numPrototypes matched_pairs] = transfer(DS, W, U, c1, c2, scale_alpha, param)
+function [U_new U new_numPrototypes trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -52,10 +52,32 @@ U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(
 new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
 
-%%%%%% Disp Accuracy
+trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param);
 
+
+
+
+function trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param)
+
+trainTargetClasses = [];
+for cls = 1:param.numClasses
+    orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
+    new_acc = getNewAccuracy(cls, D, W, U_new, new_numPrototypes, param);
+    if new_acc == orig_acc
+        continue;
+    else
+        trainTargetClasses = [trainTargetClasses; cls];
+    end
+end
+
+
+
+
+function orig_acc = getOriginalAccuracy(cls, DS, W, U, param)
+
+% %%%%%% Disp Accuracy
 cumNumProto = cumsum(param.numPrototypes);
-classIdx = find(DS.TL == c2);
+classIdx = find(DS.TL == cls);
 class_feat = DS.T(:, classIdx);
 [~, classified_raw]= max(class_feat'*W'*U, [], 2);
 classified = zeros(numel(classified_raw), 1);
@@ -64,11 +86,16 @@ for c = 1:param.numClasses
     classified(t) = c;
     classified_raw(t) = Inf;
 end
-orig_acc = numel(find(classified == c2))/numel(find(DS.TL == c2));
-fprintf('ORIGINAL accuracy for class %d ----> %.4f\n', c2, orig_acc);
+orig_acc = numel(find(classified == cls))/numel(find(DS.TL == cls));
+% fprintf('ORIGINAL accuracy for class %d ----> %.4f\n', cls, orig_acc);
+
+
+
+
+function new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param)
 
 cumNumProto = cumsum(new_numPrototypes);
-classIdx = find(DS.TL == c2);
+classIdx = find(DS.TL == cls);
 class_feat = DS.T(:, classIdx);
 [~, classified_raw]= max(class_feat'*W'*U_new, [], 2);
 classified = zeros(numel(classified_raw), 1);
@@ -77,32 +104,34 @@ for c = 1:param.numClasses
     classified(t) = c;
     classified_raw(t) = Inf;
 end
-new_acc = numel(find(classified == c2))/numel(find(DS.TL == c2));
-fprintf('TRANSFER accuracy for class %d ----> %.4f\n', c2, new_acc);
+new_acc = numel(find(classified == cls))/numel(find(DS.TL == cls));
+% fprintf('TRANSFER accuracy for class %d ----> %.4f\n', cls, new_acc);
 
 
-cumNumProto = cumsum(param.numPrototypes);
-[~, classified_raw] = max(DS.T'*W'*U, [], 2);
-classified = zeros(numel(classified_raw), 1);
-for c = 1:param.numClasses
-    t = find(classified_raw <= cumNumProto(c));
-    classified(t) = c;
-    classified_raw(t) = Inf;
-end
-test_acc = numel(find(DS.TL == classified))/numel(DS.TL);
-fprintf('ORIGINAL accuracy for all classes ----> %.4f\n', test_acc);
 
 
-cumNumProto = cumsum(new_numPrototypes);
-[~, classified_raw] = max(DS.T'*W'*U_new, [], 2);
-classified = zeros(numel(classified_raw), 1);
-for c = 1:param.numClasses
-    t = find(classified_raw <= cumNumProto(c));
-    classified(t) = c;
-    classified_raw(t) = Inf;
-end
-test_acc = numel(find(DS.TL == classified))/numel(DS.TL);
-fprintf('TRANSFER accuracy for all classes ----> %.4f\n', test_acc);
+% cumNumProto = cumsum(param.numPrototypes);
+% [~, classified_raw] = max(DS.T'*W'*U, [], 2);
+% classified = zeros(numel(classified_raw), 1);
+% for c = 1:param.numClasses
+%     t = find(classified_raw <= cumNumProto(c));
+%     classified(t) = c;
+%     classified_raw(t) = Inf;
+% end
+% test_acc = numel(find(DS.TL == classified))/numel(DS.TL);
+% fprintf('ORIGINAL accuracy for all classes ----> %.4f\n', test_acc);
+
+
+% cumNumProto = cumsum(new_numPrototypes);
+% [~, classified_raw] = max(DS.T'*W'*U_new, [], 2);
+% classified = zeros(numel(classified_raw), 1);
+% for c = 1:param.numClasses
+%     t = find(classified_raw <= cumNumProto(c));
+%     classified(t) = c;
+%     classified_raw(t) = Inf;
+% end
+% test_acc = numel(find(DS.TL == classified))/numel(DS.TL);
+% fprintf('TRANSFER accuracy for all classes ----> %.4f\n', test_acc);
 
 
 

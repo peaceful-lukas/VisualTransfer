@@ -31,3 +31,15 @@ end
 class_trainsfer_pairs = [maxS_idx' (1:12)']; % ------> (transfer direction)
 
 
+scale_alpha = 1.1;
+for i=1:size(class_trainsfer_pairs, 1)
+    c1 = class_trainsfer_pairs(i, 1);
+    c = class_trainsfer_pairs(i, 2);
+    scale_alpha = 1.1;
+
+    [U_new U new_numPrototypes trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param);
+
+    param.numPrototypes = new_numPrototypes;
+    U = U_new;
+end
+
