@@ -4,7 +4,7 @@ sTriplets_local = localStructurePreservingTriplets(param_new, trainTargetClasses
 param_new.sTriplets = sTriplets_local;
 
 U_retrained = learnU_new(DS, W, U_new, param_new);
-[~, accuracy] = dispAccuracy(method, 0, DS, W, U_retrained, param_new);
+[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U_retrained, param_new);
 
 
 
