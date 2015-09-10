@@ -97,6 +97,7 @@ param.knnGraphs = knnGraphs;
 param.protoAssign = protoAssign;
 
 
+param.lowDim = sum(numPrototypes)-1;
 [~, pca_score, ~] = pca(classProtos');
 U = pca_score(:, 1:param.lowDim)'; % approximate the original distributions of prototypes.
 U = normc(U);
