@@ -53,7 +53,7 @@ for i=1:length(param_new.numClasses)
     protoOffset = startProtoIdx(i);
     A = param_new.knnGraphs{i};
     
-    for j=1:length(size(A, 2))
+    for j=1:size(A, 2)
         neighbors = find(A(:, j) == 1);
         non_neighbors = find(A(:, j) == 0);
         non_neighbors(find(non_neighbors == j)) = [];
