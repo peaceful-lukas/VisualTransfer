@@ -53,9 +53,15 @@ end
 % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
 
-dispAccuracies(DS, W, U, U_new, param_new.numPrototypes, param);
-trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, param_new.numPrototypes, param);
+dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param);
+trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param);
 
+fprintf('Total Accuracy : \n');
+fprintf('BEFORE TRANSFER >>\n');
+[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U0, param_new);
+fprintf('AFTER TRANSFER >>\n');
+[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U_new, param_new);
+fprintf('\n\n');
 
 
 
@@ -97,10 +103,10 @@ param_new.knnGraphs{c2} = A2_new;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U, U_new, new_numPrototypes, param)
+function trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, new_numPrototypes, param)
 trainTargetClasses = [];
 for cls = 1:param.numClasses
-    orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
+    orig_acc = getOriginalAccuracy(cls, DS, W, U0, param);
     new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param);
     if new_acc == orig_acc
         continue;
@@ -125,13 +131,13 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function orig_acc = getOriginalAccuracy(cls, DS, W, U, param)
+function orig_acc = getOriginalAccuracy(cls, DS, W, U0, param)
 
 % %%%%%% Disp Accuracy
 cumNumProto = cumsum(param.numPrototypes);
 classIdx = find(DS.TL == cls);
 class_feat = DS.T(:, classIdx);
-[~, classified_raw]= max(class_feat'*W'*U, [], 2);
+[~, classified_raw]= max(class_feat'*W'*U0, [], 2);
 classified = zeros(numel(classified_raw), 1);
 for c = 1:param.numClasses
     t = find(classified_raw <= cumNumProto(c));
