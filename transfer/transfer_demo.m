@@ -31,20 +31,23 @@ end
 transferPairs = [maxS_idx' (1:12)']; % ------> (transfer direction)
 
 
-scale_alpha = 1.1;
+
+param0 = param;
+param_new = param;
+
+U0 = U;
+U_new = U;
+
 for i=1:size(transferPairs, 1)
     c1 = transferPairs(i, 1);
     c2 = transferPairs(i, 2);
-
-    [U_new, param_new, ~, matched_pairs, trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param);
+    scale_alpha = 1.1;
+    
+    [U_new, param, ~, matched_pairs, trainTargetClasses] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new);
 
 
     % Locally train
-    U_retrained = local_train(DS, W, U_new, param_new, trainTargetClasses);
-
-    % update
-    param = param_new;
-    U = U_new;
+    U_new = local_train(DS, W, U_new, param_new, trainTargetClasses);
 end
 
 

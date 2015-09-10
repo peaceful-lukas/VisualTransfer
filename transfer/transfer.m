@@ -1,4 +1,4 @@
-function [U_new param_new U matched_pairs trainTargetClasses] = transfer(DS, W, U, c1, c2, scale_alpha, param)
+function [U_new param_new U0 matched_pairs trainTargetClasses] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -7,8 +7,8 @@ function [U_new param_new U matched_pairs trainTargetClasses] = transfer(DS, W, 
 numProto_c1 = param.numPrototypes(c1);
 numProto_c2 = param.numPrototypes(c2);
 protoStartIdx = [0 cumsum(param.numPrototypes)];
-U_c1 = U(:, protoStartIdx(c1)+1:protoStartIdx(c1+1));
-U_c2 = U(:, protoStartIdx(c2)+1:protoStartIdx(c2+1));
+U_c1 = U0(:, protoStartIdx(c1)+1:protoStartIdx(c1+1));
+U_c2 = U0(:, protoStartIdx(c2)+1:protoStartIdx(c2+1));
 
 simMatrix = U_c1'*U_c2;
 sim_scores = sort(simMatrix(:), 'descend');
@@ -48,7 +48,7 @@ for um_idx=1:length(unmatched)
     transferred_prototypes = [transferred_prototypes transferred];
 end
 
-[U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
+[U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
 % U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
 % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
