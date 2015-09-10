@@ -48,7 +48,7 @@ for um_idx=1:length(unmatched)
     transferred_prototypes = [transferred_prototypes transferred];
 end
 
-[U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
+[U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
 % U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
 % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
