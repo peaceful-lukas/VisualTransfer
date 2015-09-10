@@ -74,7 +74,7 @@ for c = 1:param.numClasses
     D = D./max(max(D));
     
     numData_c = size(X_c, 2);
-    alpha = numData_c * 0.001;
+    alpha = numData_c * 0.01;
     a = mean(mean(D));
     [ta, ~] = ddcrp(D, 'lgstc', alpha, a);
     numPrototypes(c) = numel(unique(ta));
