@@ -71,7 +71,7 @@ if num_cTriplets > 0
 end
 
 
-dU = param.bal_c*c_dU + param.lambda_U_local*(U - U_org);
+dU = param.bal_c*c_dU + param.lambda_U_local*(U - U_orig);
 
 
 
