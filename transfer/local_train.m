@@ -1,6 +1,8 @@
 function [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses)
 
 % regenerate classification triplets
+fprintf('... generating classification triplets for local training .. ')
+keyboard;
 param_new.cTriplets = generateClassificationTriplets(DS, param_new);
 
 % locally learn prototypes (U)
@@ -36,11 +38,10 @@ while n <= param.maxIterU/10;
     U = update(U, dU, param);
 
     if ~mod(n, dispCycle)
-        fprintf('iter %d) time elapsed : %f (sec)\n', n, toc);
-    %     timeElapsed = toc;
-    %     fprintf('U%d) ', n);
-    %     loss = sampleLoss(DS, W, U, param);
-    %     fprintf('avg time: %f\n', timeElapsed/dispCycle);
+        timeElapsed = toc;
+        fprintf('U%d) ', n);
+        loss = sampleLossForLocal(DS, W, U, U_orig, param);
+        fprintf('avg time: %f\n', timeElapsed/dispCycle);
 
         tic;
     end
@@ -70,8 +71,34 @@ if num_cTriplets > 0
     c_dU = c_dU/param.c_batchSize;
 end
 
-
 dU = param.bal_c*c_dU + param.lambda_U_local*(U - U_orig);
+
+
+
+% loss function
+function loss = sampleLossForLocal(DS, W, U, U_orig, param)
+
+
+X = DS.D;
+cTriplets = sampleClassificationTriplets(DS, W, U, param);
+
+num_cTriplets = size(cTriplets, 1);
+
+cErr = 0;
+num_cV = 0;
+if num_cTriplets > 0
+    cErr_vec = diag((W*X(:, cTriplets(:, 1)))' * (U(:, cTriplets(:, 3)) - U(:, cTriplets(:, 2))));
+    viol = find(cErr_vec > 0);
+    num_cV = length(viol);
+
+    if viol > 0
+        cErr = param.c_lm + sum(cErr_vec(viol));
+    end
+end
+
+loss = cErr + param.lambda_U_local*0.5*norm(U - U_orig, 'fro')^2;
+fprintf('cV: %d / cErr: %f / normU: %f / ', num_cV, cErr, norm(U, 'fro'));
+
 
 
 
