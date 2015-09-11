@@ -25,8 +25,8 @@ U_orig = U;
 WX = W*DS.D;
 aux = eye(sum(param.numPrototypes));
 
-% dispCycle = 10;
-% n = 1;
+dispCycle = 100;
+n = 1;
 
 tic;
 while n <= param.maxIterU/10;
@@ -35,14 +35,15 @@ while n <= param.maxIterU/10;
     dU = computeGradient(WX, U, U_orig, aux, cTriplets, param, trainTargetClasses);
     U = update(U, dU, param);
 
-    % if ~mod(n, dispCycle)
+    if ~mod(n, dispCycle)
+        fprintf('iter %d) time elapsed : %f (sec)\n', n, toc);
     %     timeElapsed = toc;
     %     fprintf('U%d) ', n);
     %     loss = sampleLoss(DS, W, U, param);
     %     fprintf('avg time: %f\n', timeElapsed/dispCycle);
 
-    %     tic;
-    % end
+        tic;
+    end
 
     n = n + 1;
 end
