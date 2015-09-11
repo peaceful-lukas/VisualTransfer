@@ -2,7 +2,6 @@ function [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTar
 
 % regenerate classification triplets
 fprintf('... generating classification triplets for local training .. \n');
-keyboard;
 param_new.cTriplets = generateClassificationTriplets(DS, param_new);
 
 % locally learn prototypes (U)
@@ -31,7 +30,7 @@ dispCycle = 100;
 n = 1;
 
 tic;
-while n <= param.maxIterU/10;
+while n <= param.maxIterU;
     cTriplets = sampleClassificationTriplets(DS, W, U, param);
 
     dU = computeGradient(WX, U, U_orig, aux, cTriplets, param, trainTargetClasses);

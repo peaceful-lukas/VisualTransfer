@@ -47,9 +47,10 @@ for i=1:size(transferPairs, 1)
 
 
     % Locally train
-    param_new.lambda_U_local = 10000000;
-    param_new.lr_U_local = 0.00000000001;
-    [U_new param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
+    param_new.lambda_U_local = 100;
+    param_new.lr_U_local = 0.001;
+    % [U_new param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
+    [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
 end
 
 
