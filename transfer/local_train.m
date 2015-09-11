@@ -1,7 +1,7 @@
 function [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses)
 
 % regenerate classification triplets
-fprintf('... generating classification triplets for local training .. ')
+fprintf('... generating classification triplets for local training .. \n');
 keyboard;
 param_new.cTriplets = generateClassificationTriplets(DS, param_new);
 
@@ -57,7 +57,7 @@ U_retrained = U;
 % update
 function U = update(U, dU, param)
 
-U = U - param.lr_U * dU;
+U = U - param.lr_U_local * dU;
 
 
 % gradient computation
@@ -87,12 +87,13 @@ num_cTriplets = size(cTriplets, 1);
 cErr = 0;
 num_cV = 0;
 if num_cTriplets > 0
-    cErr_vec = diag((W*X(:, cTriplets(:, 1)))' * (U(:, cTriplets(:, 3)) - U(:, cTriplets(:, 2))));
+    cErr_vec = param.c_lm + diag((W*X(:, cTriplets(:, 1)))' * (U(:, cTriplets(:, 3)) - U(:, cTriplets(:, 2))));
+
     viol = find(cErr_vec > 0);
     num_cV = length(viol);
 
     if viol > 0
-        cErr = param.c_lm + sum(cErr_vec(viol));
+        cErr = sum(cErr_vec(viol));
     end
 end
 
