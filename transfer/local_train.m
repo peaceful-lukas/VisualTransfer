@@ -70,7 +70,10 @@ if num_cTriplets > 0
     c_dU = c_dU/param.c_batchSize;
 end
 
-dU = param.bal_c*c_dU + param.lambda_U_local*(U - U_orig);
+bal_c = param.bal_c / (param.bal_c + param.lambda_U_local);
+lambda_U_local = param.lambda_U_local / (param.bal_c + param.lambda_U_local);
+
+dU = bal_c*c_dU + lambda_U_local*(U - U_orig);
 
 
 

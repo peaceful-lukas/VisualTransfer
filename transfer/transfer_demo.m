@@ -47,13 +47,14 @@ for i=1:size(transferPairs, 1)
 
 
     % Locally train
-    param_new.lambda_U_local = 10;
-    param_new.lr_U_local = 0.0001;
+    param_new.lambda_U_local = 100;
+    param_new.lr_U_local = 0.001;
     % [U_new param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
     [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
 
 
-    transfer_dispAccuracies(DS, W, U, U_new, param_new.numPrototypes, param0);
+    transfer_dispAccuracies(DS, W, U, U_retrained, param_new.numPrototypes, param0);
+
 end
 
 
