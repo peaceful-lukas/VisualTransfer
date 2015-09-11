@@ -97,7 +97,7 @@ if num_cTriplets > 0
 end
 
 loss = cErr + param.lambda_U_local*0.5*norm(U - U_orig, 'fro')^2;
-fprintf('cV: %d / cErr: %f / normU: %f / ', num_cV, cErr, norm(U, 'fro'));
+fprintf('cV: %d / cErr: %f / norm(U - U_orig): %f / ', num_cV, cErr, norm(U-U_orig, 'fro'));
 
 
 
