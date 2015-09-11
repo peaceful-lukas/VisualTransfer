@@ -84,7 +84,7 @@ A2_new = zeros(size(A2, 1)+length(unmatched));
 A2_new(1:size(A2, 1), 1:size(A2, 1)) = A2;
 
 n = size(A2, 1);
-for i=1:length(matched)
+for i=1:size(matched, 1)
     for j=1:length(unmatched)
         if A1(matched(i, 1), unmatched(j)) == 1
             A2_new(matched(i, 2), n+j) = 1;
