@@ -1,6 +1,18 @@
 function DS = loadDataset(dataset)
+    if strcmp(dataset, 'birds200')
+        fprintf('Birds200 Dataset...\n\n');
+        load('/v9/birds200/proc/trF.mat');
+        load('/v9/birds200/proc/trL.mat');
+        load('/v9/birds200/proc/teF.mat');
+        load('/v9/birds200/proc/teL.mat');
 
-    if strcmp(dataset, 'pascal3d_all')
+        DS = {};
+        DS.D = trF;
+        DS.DL = trL;
+        DS.T = teF;
+        DS.TL = teL;
+
+    elseif strcmp(dataset, 'pascal3d_all')
         fprintf('PASCAL3D+ FULL DATA (manipulated dataset along with POSE ANNOTATION).\n\n');
         load('/v9/PASCAL3D/both/proc/trF.mat');
         load('/v9/PASCAL3D/both/proc/trL.mat');
