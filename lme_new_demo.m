@@ -9,7 +9,7 @@ addpath 'pgm/RRWM'
 addpath 'transfer'
 
 method = 'lme_new';
-dataset = 'pascal3d_pascal';
+dataset = 'birds200';
 
 param = getParam(method, dataset);
 
