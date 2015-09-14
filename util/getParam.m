@@ -34,7 +34,7 @@ function param = getParam(method, dataset)
 end
 
 
-function param = getBirds200Param('birds200')
+function param = getBirds200Param(method)
     if strcmp(method, 'lme_sp')
         param.numClasses = 200;
         param.lowDim = 200;
