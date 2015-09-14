@@ -20,7 +20,7 @@ end
 
 [maxS, maxS_idx] = max(S, [], 1);
 
-tPairs = [maxS_idx' (1:12)']; % ------> (transfer direction)
+tPairs = [maxS_idx' (1:param.numClasses)']; % ------> (transfer direction)
 
 
 
