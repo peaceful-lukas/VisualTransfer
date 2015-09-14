@@ -10,7 +10,7 @@ for i=1:param.numClasses
             S(i, j) = -Inf;
         else
             % maximum score
-            S(i, j) = max(max(U(:, protoStartIdx(i)+1:protoStartIdx(i+1))'*U(:, protoStartIdx(j)+1:protoStartIdx(j+1)));
+            S(i, j) = max(max(U(:, protoStartIdx(i)+1:protoStartIdx(i+1))'*U(:, protoStartIdx(j)+1:protoStartIdx(j+1))));
 
             % average score
             % S(i, j) = mean(U(:, protoStartIdx(i)+1:protoStartIdx(i+1)), 2)'*mean(U(:, protoStartIdx(j)+1:protoStartIdx(j+1)), 2);
