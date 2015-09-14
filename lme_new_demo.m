@@ -106,7 +106,7 @@ W = W/norm(W, 'fro');
 
 
 n = 0;
-highest_acc = 0.6;
+highest_acc = 0.40;
 highest_W = W;
 highest_U = U;
 iter_condition = 1;

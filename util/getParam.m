@@ -65,9 +65,9 @@ function param = getBirds200Param(method)
         param.featureDim = 9216;
 
         param.knn_const = 3; % constant for constructing k-nn graph.
-        param.c_lm = 200; % large margin for classification
-        param.p_lm = 20; % large margin for classification
-        param.s_lm = 10; % large margin for structure preserving
+        param.c_lm = 50; % large margin for classification
+        param.p_lm = 10; % large margin for classification
+        param.s_lm = 1; % large margin for structure preserving
         param.lambda_W = 0.001; % regularizer coefficient
         param.lambda_U = 0.01; % regularizer coefficient
         param.lr_W = 0.0001; % learning rate for W
