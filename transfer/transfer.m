@@ -1,4 +1,4 @@
-function [U_new param_new U0 matched_pairs trainTargetClasses] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param)
+function [U_new param_new U0 matched_pairs trainTargetClasses] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param, param0)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -53,12 +53,12 @@ end
 % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 
 
-dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param);
-trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param);
+dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param0);
+trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param0);
 
 fprintf('Total Accuracy : \n');
 fprintf('BEFORE TRANSFER >>\n');
-[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U0, param);
+[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U0, param0);
 fprintf('AFTER TRANSFER >>\n');
 [~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U_new, param_new);
 fprintf('\n\n');

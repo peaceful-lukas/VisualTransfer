@@ -9,7 +9,7 @@ addpath 'pgm/RRWM'
 addpath 'transfer'
 
 method = 'lme_new';
-dataset = 'birds200';
+dataset = 'awa';
 
 param = getParam(method, dataset);
 
