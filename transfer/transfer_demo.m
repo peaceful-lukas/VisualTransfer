@@ -1,4 +1,29 @@
 
+param0 = param;
+param_new = param;
+
+U0 = U;
+U_new = U;
+
+c1 = tPairs(i, 1);
+c2 = tPairs(i, 2);
+scale_alpha = 1.0;
+
+for i=1:param.numClasses
+    for j=i+1:param.numClasses
+        [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
+        fprintf('%d with %d : %f\n', i, j, score_GM);
+    end
+end
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%
+
+
 [tPairs S] = transferPairs(U, param);
 
 param0 = param;
@@ -14,7 +39,7 @@ for i=1:size(tPairs, 1)
     c2 = tPairs(i, 2);
     scale_alpha = 1.0;
 
-    [U_new, param_new, matched_pairs, trainTargetClasses] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
+    [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
 
     fprintf('\ntrain target classes ----- \n');
     for j=1:length(trainTargetClasses)

@@ -1,4 +1,4 @@
-function [U_new param_new matched_pairs trainTargetClasses] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param, param0)
+function [U_new param_new matched_pairs trainTargetClasses, score_GM] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param, param0)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -22,7 +22,7 @@ param_gm.knn2 = 4;
 param_gm.voting_alpha = 10;
 
 
-[X_sol, cand_matches] = progGM(U_c1, U_c2, param_gm);
+[X_sol, cand_matches, score_GM] = progGM(U_c1, U_c2, param_gm);
 matched_pairs = cand_matches(find(X_sol), :);
 numMatched = size(matched_pairs, 1);
 
