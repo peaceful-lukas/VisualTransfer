@@ -1,5 +1,6 @@
 function [tPairs S] = transferPairs(U, param)
 
+keyboard;
 
 protoStartIdx = [0 cumsum(param.numPrototypes)];
 S = zeros(param.numClasses, param.numClasses); % Similarity between class prototype distributions
@@ -53,3 +54,19 @@ end
 %         M(i, j) = prematching(L{i}, L{j});
 %     end
 % end
+
+
+function str_tPairs = stringifyClasses(tPairs, dataset)
+
+str_tPairs = cell(size(tPairs));
+
+if strcmp(dataset, 'awa')
+    [idx, clsname] = textread('/v9/AwA/raw/Animals_with_Attributes/classes.txt', '%d %s');
+    
+    for i=1:size(tPairs, 1)
+        str_tPairs{i, 1} = clsname{tPairs(i, 1)};
+        str_tPairs{i, 2} = clsname{tPairs(i, 2)};
+    end
+elseif strcmp(dataset, 'pascal3d_pascal') || strcmp(dataset, 'pascal3d_imagenet') || strcmp(dataset, 'pascal3d_all')
+    
+end
