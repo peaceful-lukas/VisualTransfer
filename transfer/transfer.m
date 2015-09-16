@@ -59,7 +59,6 @@ else
     param_new = param;
 end
 
-keyboard;
 dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param0);
 trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param0);
 
