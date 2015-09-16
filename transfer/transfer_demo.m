@@ -56,8 +56,8 @@ for i=1:size(tPairs, 1)
 
 
     % Locally train
-    % param_new.lambda_W_local = 0.1;
-    % param_new.lr_W_local = 0.00001;
+    param_new.lambda_W_local = 0.1;
+    param_new.lr_W_local = 0.00001;
     param_new.lambda_U_local = 1;
     param_new.lr_U_local = 0.00001;
     [U_new param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);

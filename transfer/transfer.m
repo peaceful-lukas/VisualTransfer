@@ -4,8 +4,8 @@ function [U_new param_new matched_pairs trainTargetClasses, score_GM] = transfer
 %    All the unmatched prototypes are transferred to the class c2
 
 
-numProto_c1 = param.numPrototypes(c1);
-numProto_c2 = param.numPrototypes(c2);
+numProto_c1 = param0.numPrototypes(c1);
+numProto_c2 = param0.numPrototypes(c2);
 protoStartIdx = [0 cumsum(param.numPrototypes)];
 U_c1 = U0(:, protoStartIdx(c1)+1:protoStartIdx(c1+1));
 U_c2 = U0(:, protoStartIdx(c2)+1:protoStartIdx(c2+1));
