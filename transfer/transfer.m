@@ -71,7 +71,7 @@ fprintf('\n\n');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched_pairs, unmatched, param_new)
+function [U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched, unmatched, param_new)
 % 1. add transferred prototypes into U
 % 2. update the number of prototypes of the class
 % 3. update the knn-graph of the class
