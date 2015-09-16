@@ -34,7 +34,7 @@ numMatched = size(matched_pairs, 1);
 %%%%%% Transfer (c1 --> c2)
 new_numPrototypes = param.numPrototypes;
 
-unmatched = 1:param.numPrototypes(c1);
+unmatched = 1:param0.numPrototypes(c1);
 unmatched(matched_pairs(:, 1)) = [];
 
 if numel(unmatched) > 0
@@ -42,7 +42,7 @@ if numel(unmatched) > 0
     transferred_prototypes = [];
     for um_idx=1:length(unmatched)
         target = unmatched(um_idx);
-        transferred = zeros(param.lowDim, 1);
+        transferred = zeros(param0.lowDim, 1);
         for n=1:numMatched
             transferred = transferred + scale_alpha*U_c2(:, matched_pairs(n, 2)) - U_c1(:, matched_pairs(n, 1)) + U_c1(:, target);
         end
