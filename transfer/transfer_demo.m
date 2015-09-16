@@ -67,6 +67,7 @@ for i=1:size(tPairs, 1)
     param_new.bal_s = 1;
     [W_new, U_new param_new] = local_train(DS, W_new, U_new, param_new, trainTargetClasses);
 
+    % Result
     transfer_dispAccuracies(DS, W_new, U_new, W0, U0, param_new, param0);
 end
 

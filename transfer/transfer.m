@@ -53,8 +53,6 @@ if numel(unmatched) > 0
     [U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched_pairs, unmatched, param_new);
 else
     fprintf('\n\nNo transfer...\n\n');
-    U_new = U;
-    param_new = param;
 end
 
 dispAccuracies(DS, W_new, U_new, W0, U0, param_new, param0);
