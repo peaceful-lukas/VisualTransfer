@@ -13,7 +13,7 @@ while n <= param.maxIterU;
     cTriplets = sampleClassificationTriplets(DS, W, U, param);
     sTriplets = sampleStructurePreservingTriplets(DS, W, U, param);
 
-    dU = computeGradient(WX, U, U_orig, aux, cTriplets, param, trainTargetClasses);
+    dU = computeGradient(WX, U, U_orig, aux, cTriplets, sTriplets, param, trainTargetClasses);
     U = update(U, dU, param);
 
     if ~mod(n, dispCycle)
