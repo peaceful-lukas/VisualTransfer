@@ -18,12 +18,30 @@ for i=1:param.numClasses
     end
 end
 
-[maxS, maxS_idx] = max(S, [], 1);
-
-tPairs = [maxS_idx' (1:param.numClasses)']; % ------> (transfer direction)
-
+% S_tmp = S;
+% S_tmp(find(S_tmp < 0.7)) = 0
 
 
+
+% % take it exponetially
+% sim_thrsh = 0.9;
+% S_exp = exp(S)./repmat(max(exp(S), [], 1), size(S, 1), 1);
+% S_exp(find(S_exp < sim_thrsh)) = 0;
+% % S_exp = exp(S./repmat(max(S, [], 1), size(S, 1), 1));
+% % S = exp(S);
+
+% % Best match
+% % [maxS, maxS_idx] = max(S, [], 1);
+% % tPairs = [maxS_idx' (1:param.numClasses)']; % ------> (transfer direction)
+
+% % All match
+% sim_thrsh = 0.
+% find(S < 
+
+
+
+
+% graph Laplacian between classes
 % L = {};
 % for i=1:param.numClasses
 %     L{i} = laplacian(param.knnGraphs{i}, 1); % normalized

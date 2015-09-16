@@ -7,6 +7,7 @@ addpath 'util'
 addpath 'pgm'
 addpath 'pgm/RRWM'
 addpath 'transfer'
+addpath 'transfer/local_lme'
 
 method = 'lme_new';
 dataset = 'awa';
