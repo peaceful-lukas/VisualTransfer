@@ -1,7 +1,5 @@
 function [tPairs S] = transferPairs(U, param)
 
-keyboard;
-
 protoStartIdx = [0 cumsum(param.numPrototypes)];
 S = zeros(param.numClasses, param.numClasses); % Similarity between class prototype distributions
 
@@ -19,9 +17,20 @@ for i=1:param.numClasses
     end
 end
 
-% S_tmp = S;
-% S_tmp(find(S_tmp < 0.7)) = 0
+S_sorted = sort(S(:), 'descend');
 
+S_tmp = S;
+% S_tmp(find(S_tmp < 0.5)) = 0;
+S_tmp(find(S_tmp < S_sorted(param.numClasses))) = 0;
+
+% transfer direction : <-------- 
+tPairs = [floor((find(S_tmp)-1)/param.numClasses)+1 mod(find(S_tmp), param.numClasses)];
+tPairs(find(tPairs == 0)) = param.numClasses;
+
+% Print out the transfer directions determined.
+fprintf('TRANSFER DIRECTIONS\n');
+fprintf('<------------------\n');
+str_tPairs = stringifyClasses(tPairs, dataset)
 
 
 % % take it exponetially
@@ -32,12 +41,35 @@ end
 % % S = exp(S);
 
 % % Best match
-% % [maxS, maxS_idx] = max(S, [], 1);
-% % tPairs = [maxS_idx' (1:param.numClasses)']; % ------> (transfer direction)
+% [maxS, maxS_idx] = max(S, [], 1);
+% tPairs = [maxS_idx' (1:param.numClasses)']; % ------> (transfer direction)
 
-% % All match
-% sim_thrsh = 0.
-% find(S < 
+
+function str_tPairs = stringifyClasses(tPairs, dataset)
+
+str_tPairs = cell(size(tPairs));
+
+if strcmp(dataset, 'awa')
+    [idx, clsname] = textread('/v9/AwA/raw/Animals_with_Attributes/classes.txt', '%d %s');
+    
+    for i=1:size(tPairs, 1)
+        str_tPairs{i, 1} = clsname{tPairs(i, 1)};
+        str_tPairs{i, 2} = clsname{tPairs(i, 2)};
+    end
+elseif strcmp(dataset, 'pascal3d_pascal') || strcmp(dataset, 'pascal3d_imagenet') || strcmp(dataset, 'pascal3d_all')
+    clsnames = {'aeroplane', 'bicycle', 'boat', 'bottle', 'bus', 'car', 'chair', 'diningtable', 'motorbike', 'sofa', 'train', 'tvmonitor'};
+    
+    for i=1:size(tPairs, 1)
+        for j=1:2
+            str_tPairs{i, j} = clsnames{tPairs(i, j)};
+        end
+    end
+else
+    fprintf('\nno class name list on %s\n\n', dataset);
+end
+
+
+
 
 
 
@@ -55,18 +87,3 @@ end
 %     end
 % end
 
-
-function str_tPairs = stringifyClasses(tPairs, dataset)
-
-str_tPairs = cell(size(tPairs));
-
-if strcmp(dataset, 'awa')
-    [idx, clsname] = textread('/v9/AwA/raw/Animals_with_Attributes/classes.txt', '%d %s');
-    
-    for i=1:size(tPairs, 1)
-        str_tPairs{i, 1} = clsname{tPairs(i, 1)};
-        str_tPairs{i, 2} = clsname{tPairs(i, 2)};
-    end
-elseif strcmp(dataset, 'pascal3d_pascal') || strcmp(dataset, 'pascal3d_imagenet') || strcmp(dataset, 'pascal3d_all')
-    
-end
