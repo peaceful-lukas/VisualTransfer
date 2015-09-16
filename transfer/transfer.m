@@ -6,7 +6,7 @@ function [U_new param_new matched_pairs trainTargetClasses, score_GM] = transfer
 
 numProto_c1 = param0.numPrototypes(c1);
 numProto_c2 = param0.numPrototypes(c2);
-protoStartIdx = [0 cumsum(param.numPrototypes)];
+protoStartIdx = [0 cumsum(param0.numPrototypes)];
 U_c1 = U0(:, protoStartIdx(c1)+1:protoStartIdx(c1+1));
 U_c2 = U0(:, protoStartIdx(c2)+1:protoStartIdx(c2+1));
 
