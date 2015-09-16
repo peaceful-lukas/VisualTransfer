@@ -38,7 +38,7 @@
 
 
 [tPairs S] = transferPairs(U, param);
-
+% tPairs([2 5 6 10], :) = []
 param0 = param;
 param_new = param;
 
@@ -59,12 +59,12 @@ for i=1:size(tPairs, 1)
 
 
     % % Locally train
-    param_new.lambda_W_local = 0.1;
-    param_new.lambda_U_local = 1;
-    param_new.lr_U_local = 0.00001;
-    param_new.lr_W_local = 0.00001;
-    param_new.bal_c = 1;
-    param_new.bal_s = 1;
+    param_new.lambda_W_local = 1;
+    param_new.lambda_U_local = 100;
+    param_new.lr_U_local = 0.000001;
+    param_new.lr_W_local = 0.00000001;
+    param_new.bal_c = 10;
+    param_new.bal_s = 10;
     [W_new, U_new param_new] = local_train(DS, W_new, U_new, param_new, trainTargetClasses);
 
     % Result
