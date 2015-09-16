@@ -30,7 +30,7 @@ tPairs(find(tPairs == 0)) = param.numClasses;
 % Print out the transfer directions determined.
 fprintf('TRANSFER DIRECTIONS\n');
 fprintf('<------------------\n');
-str_tPairs = stringifyClasses(tPairs, dataset)
+str_tPairs = stringifyClasses(tPairs, param.dataset)
 
 
 % % take it exponetially
