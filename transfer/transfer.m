@@ -44,7 +44,7 @@ if numel(unmatched) > 0
         target = unmatched(um_idx);
         transferred = zeros(param0.lowDim, 1);
         for n=1:numMatched
-            transferred = transferred + U_c2(:, matched_pairs(n, 2)) - scale_alpha* (U_c1(:, matched_pairs(n, 1)) - U_c1(:, target));
+            transferred = transferred + U_c2(:, matched_pairs(n, 2)) - scale_alpha * (U_c1(:, matched_pairs(n, 1)) - U_c1(:, target));
         end
         transferred = transferred/numMatched;
         transferred_prototypes = [transferred_prototypes transferred];

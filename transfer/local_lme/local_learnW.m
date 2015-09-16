@@ -47,4 +47,4 @@ end
 bal_c = param.bal_c/(param.bal_c + param.lambda_W_local);
 lambda_W_local = param.lambda_W_local/(param.bal_c + param.lambda_W_local);
 
-dW = bal_c*c_dW + lambda_W_local*W;
+dW = bal_c*c_dW + lambda_W_local*(W - W_orig);

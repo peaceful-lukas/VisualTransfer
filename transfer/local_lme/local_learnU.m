@@ -65,6 +65,6 @@ bal_s = param.bal_s/(param.bal_c + param.bal_s + param.lambda_U_local);
 lambda_U_local = param.lambda_U_local/(param.bal_c + param.bal_s + param.lambda_U_local);
 
 
-dU = bal_c*c_dU + bal_s*s_dU + lambda_U_local*U;
+dU = bal_c*c_dU + bal_s*s_dU + lambda_U_local*(U - U_orig);
 
 
