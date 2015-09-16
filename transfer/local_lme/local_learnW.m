@@ -9,7 +9,7 @@ tic;
 while n <= param.maxIterW
     cTriplets = sampleClassificationTriplets(DS, W, U, param);
 
-    dW = computeGradient(DS, W, U, cTriplets, pTriplets, param);
+    dW = computeGradient(DS, W, U, cTriplets, param);
     W = update(W, dW, param);
 
     if ~mod(n, dispCycle)
@@ -33,11 +33,10 @@ W = W - param.lr_W_local * dW;
 
 
 % gradient computation
-function dW = computeGradient(DS, W, U, cTriplets, pTriplets, param)
+function dW = computeGradient(DS, W, U, cTriplets, param)
 
 X = DS.D;
 num_cTriplets = size(cTriplets, 1);
-num_pTriplets = size(pTriplets, 1);
 
 c_dW = zeros(size(W));
 if num_cTriplets > 0
