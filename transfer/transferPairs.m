@@ -23,7 +23,7 @@ S_tmp = S;
 % S_tmp(find(S_tmp < 0.5)) = 0;
 S_tmp(find(S_tmp < S_sorted(param.numClasses))) = 0;
 
-% transfer direction : <-------- 
+% transfer direction : <-------- ( but not important since S is a symmetric matrix.)
 tPairs = [floor((find(S_tmp)-1)/param.numClasses)+1 mod(find(S_tmp), param.numClasses)];
 tPairs(find(tPairs == 0)) = param.numClasses;
 

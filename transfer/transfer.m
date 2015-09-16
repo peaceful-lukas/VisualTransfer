@@ -1,4 +1,4 @@
-function [U_new param_new U0 matched_pairs trainTargetClasses] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param, param0)
+function [U_new param_new matched_pairs trainTargetClasses] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param, param0)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -37,21 +37,27 @@ new_numPrototypes = param.numPrototypes;
 unmatched = 1:param.numPrototypes(c1);
 unmatched(matched_pairs(:, 1)) = [];
 
-transferred_prototypes = [];
-for um_idx=1:length(unmatched)
-    target = unmatched(um_idx);
-    transferred = zeros(param.lowDim, 1);
-    for n=1:numMatched
-        transferred = transferred + scale_alpha*U_c2(:, matched_pairs(n, 2)) - U_c1(:, matched_pairs(n, 1)) + U_c1(:, target);
+if numel(unmatched) > 0
+    fprintf('Transfer begins!!\n');
+    transferred_prototypes = [];
+    for um_idx=1:length(unmatched)
+        target = unmatched(um_idx);
+        transferred = zeros(param.lowDim, 1);
+        for n=1:numMatched
+            transferred = transferred + scale_alpha*U_c2(:, matched_pairs(n, 2)) - U_c1(:, matched_pairs(n, 1)) + U_c1(:, target);
+        end
+        transferred = transferred/numMatched;
+        transferred_prototypes = [transferred_prototypes transferred];
     end
-    transferred = transferred/numMatched;
-    transferred_prototypes = [transferred_prototypes transferred];
+
+    [U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
+    % U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
+    % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
+else
+    fprintf('No transfer...\n');
+    U_new = U;
+    param_new = param;
 end
-
-[U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
-% U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
-% new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
-
 
 dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param0);
 trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param0);

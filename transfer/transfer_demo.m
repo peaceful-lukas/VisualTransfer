@@ -14,7 +14,7 @@ for i=1:size(tPairs, 1)
     c2 = tPairs(i, 2);
     scale_alpha = 1.0;
 
-    [U_new, param_new, ~, matched_pairs, trainTargetClasses] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
+    [U_new, param_new, matched_pairs, trainTargetClasses] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
 
     fprintf('\ntrain target classes ----- \n');
     for j=1:length(trainTargetClasses)
