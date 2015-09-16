@@ -54,18 +54,20 @@ for i=1:size(tPairs, 1)
     % Transfer
     c1 = tPairs(i, 1);
     c2 = tPairs(i, 2);
-    scale_alpha = 1.1;
+    scale_alpha = 1.0;
     [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W_new, U_new, W0, U0, c1, c2, scale_alpha, param_new, param0);
 
 
     % % Locally train
     param_new.lambda_W_local = 0.1;
-    param_new.lr_W_local = 0.00001;
     param_new.lambda_U_local = 1;
     param_new.lr_U_local = 0.00001;
+    param_new.lr_W_local = 0.00001;
+    param_new.bal_c = 1;
+    param_new.bal_s = 1;
     [W_new, U_new param_new] = local_train(DS, W_new, U_new, param_new, trainTargetClasses);
 
-    transfer_dispAccuracies(DS, W, U, U_new, param_new.numPrototypes, param0);
+    transfer_dispAccuracies(DS, W_new, U_new, W0, U0, param_new, param0);
 end
 
 
