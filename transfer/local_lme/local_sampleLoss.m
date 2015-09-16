@@ -32,5 +32,5 @@ if num_sTriplets > 0
 end
 
 loss = cErr + sErr + param.lambda_W_local*0.5*norm(W - W_orig, 'fro')^2 + param.lambda_U_local*0.5*norm(U - U_orig, 'fro')^2;
-fprintf('cV: %d / sV: %d / cE: %f / sE: %f / normW: %f / normU: %f / ', num_cV, num_sV, cErr, sErr, norm(W-W_orig, 'fro'), norm(U-U_orig, 'fro'));
+fprintf('cV: %d / sV: %d / cE: %f / sE: %f / norm(W - W_orig): %f / norm(U - U_orig): %f / ', num_cV, num_sV, cErr, sErr, norm(W-W_orig, 'fro'), norm(U-U_orig, 'fro'));
 

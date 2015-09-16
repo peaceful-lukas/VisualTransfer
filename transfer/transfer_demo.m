@@ -48,17 +48,11 @@ U_new = U;
 for i=1:size(tPairs, 1)
     fprintf('\n\n\n================================ class %d ================================\n', i);
 
+    % Transfer
     c1 = tPairs(i, 1);
     c2 = tPairs(i, 2);
     scale_alpha = 1.0;
-
     [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
-
-    fprintf('\ntrain target classes ----- \n');
-    for j=1:length(trainTargetClasses)
-        fprintf('%d\t', trainTargetClasses(j));
-    end
-    fprintf('\n\n');
 
 
     % Locally train
@@ -75,22 +69,6 @@ end
 
 
 
-
-for i=2:size(tPairs, 1)
-    fprintf('\n\n\n================================ class %d ================================\n', i);
-
-    c1 = tPairs(i, 1);
-    c2 = tPairs(i, 2);
-    scale_alpha = 1.0;
-
-    [U_new, param_new, ~, matched_pairs, trainTargetClasses] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
-
-    fprintf('\ntrain target classes ----- \n');
-    for j=1:length(trainTargetClasses)
-        fprintf('%d\t', trainTargetClasses(j));
-    end
-    fprintf('\n\n');
-end
 
 
 

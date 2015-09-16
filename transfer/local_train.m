@@ -1,7 +1,7 @@
 function [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses)
 
 % regenerate classification triplets
-fprintf('... generating classification triplets for local training .. \n');
+fprintf('Local Training LME ... \n');
 param_new.cTriplets = generateClassificationTriplets(DS, param_new);
 param_new.sTriplets = generateLocasStructurePreservingTriplets(param_new, trainTargetClasses);
 
@@ -9,9 +9,9 @@ param_new.sTriplets = generateLocasStructurePreservingTriplets(param_new, trainT
 W_retrained = local_learnW(DS, W, U_new, param_new, trainTargetClasses);
 U_retrained = local_learnU(DS, W, U_new, param_new, trainTargetClasses);
 
-
-fprintf('before\n');
+fprintf('Local LME RESULT\n');
+fprintf('\tbefore\n');
 [~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U_new, param_new);
-fprintf('after\n');
+fprintf('\tafter\n');
 [~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U_retrained, param_new);
-
+fprintf('\n\n\n\n');

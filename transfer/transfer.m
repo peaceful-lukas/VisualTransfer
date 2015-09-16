@@ -38,7 +38,7 @@ unmatched = 1:param.numPrototypes(c1);
 unmatched(matched_pairs(:, 1)) = [];
 
 if numel(unmatched) > 0
-    fprintf('Transfer begins!!\n');
+    fprintf('\n\nTransfer begins!!\n\n');
     transferred_prototypes = [];
     for um_idx=1:length(unmatched)
         target = unmatched(um_idx);
@@ -54,7 +54,7 @@ if numel(unmatched) > 0
     % U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
     % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
 else
-    fprintf('No transfer...\n');
+    fprintf('\n\nNo transfer...\n\n');
     U_new = U;
     param_new = param;
 end
@@ -62,7 +62,7 @@ end
 dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param0);
 trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param0);
 
-fprintf('Total Accuracy : \n');
+fprintf('Transfer Result : \n');
 fprintf('BEFORE TRANSFER >>\n');
 [~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U0, param0);
 fprintf('AFTER TRANSFER >>\n');
