@@ -1,4 +1,4 @@
-function [U_new param_new matched_pairs trainTargetClasses, score_GM] = transfer(DS, W, U, U0, c1, c2, scale_alpha, param, param0)
+function [U_new param_new matched_pairs trainTargetClasses, score_GM] = transfer(DS, W_new, U_new, W0, U0, c1, c2, scale_alpha, param_new, param0)
 % TRANSFER
 %    transfer class prototypes ( c1 ---> c2 )
 %    All the unmatched prototypes are transferred to the class c2
@@ -32,7 +32,7 @@ numMatched = size(matched_pairs, 1);
 
 
 %%%%%% Transfer (c1 --> c2)
-new_numPrototypes = param.numPrototypes;
+new_numPrototypes = param_new.numPrototypes;
 
 unmatched = 1:param0.numPrototypes(c1);
 unmatched(matched_pairs(:, 1)) = [];
@@ -50,42 +50,40 @@ if numel(unmatched) > 0
         transferred_prototypes = [transferred_prototypes transferred];
     end
 
-    [U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched_pairs, unmatched, param);
-    % U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
-    % new_numPrototypes(c2) = new_numPrototypes(c2) + length(unmatched);
+    [U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched_pairs, unmatched, param_new);
 else
     fprintf('\n\nNo transfer...\n\n');
     U_new = U;
     param_new = param;
 end
 
-dispAccuracies(DS, W, U0, U_new, param_new.numPrototypes, param0);
-trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, param_new.numPrototypes, param0);
+dispAccuracies(DS, W_new, U_new, W0, U0, param_new, param0);
+trainTargetClasses = getClassesToBeLocallyTrained(DS, W_new, U_new, W0, U0, param_new, param0);
 
 fprintf('Transfer Result : \n');
 fprintf('BEFORE TRANSFER >>\n');
-[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U0, param0);
+[~, accuracy] = dispAccuracy('lme_new', 0, DS, W0, U0, param0);
 fprintf('AFTER TRANSFER >>\n');
-[~, accuracy] = dispAccuracy('lme_new', 0, DS, W, U_new, param_new);
+[~, accuracy] = dispAccuracy('lme_new', 0, DS, W_new, U_new, param_new);
 fprintf('\n\n');
 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [U_new param_new] = updatePrototypes(U, transferred_prototypes, c1, c2, matched, unmatched, param)
+function [U_new param_new] = updatePrototypes(U_new, transferred_prototypes, c1, c2, matched_pairs, unmatched, param_new)
 % 1. add transferred prototypes into U
 % 2. update the number of prototypes of the class
 % 3. update the knn-graph of the class
 
-U_new = [U(:, 1:sum(param.numPrototypes(1:c2))) transferred_prototypes U(:, sum(param.numPrototypes(1:c2))+1:end)];
-
-param_new = param;
-param_new.numPrototypes(c2) = param.numPrototypes(c2) + length(unmatched);
+U_new = [U_new(:, 1:sum(param_new.numPrototypes(1:c2))) transferred_prototypes U_new(:, sum(param_new.numPrototypes(1:c2))+1:end)];
 
 
-A1 = param.knnGraphs{c1};
-A2 = param.knnGraphs{c2};
+param_new.numPrototypes(c2) = param_new.numPrototypes(c2) + length(unmatched);
+
+
+A1 = param_new.knnGraphs{c1};
+A2 = param_new.knnGraphs{c2};
 A2_new = zeros(size(A2, 1)+length(unmatched));
 A2_new(1:size(A2, 1), 1:size(A2, 1)) = A2;
 
@@ -109,11 +107,11 @@ param_new.knnGraphs{c2} = A2_new;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function trainTargetClasses = getClassesToBeLocallyTrained(DS, W, U0, U_new, new_numPrototypes, param)
+function trainTargetClasses = getClassesToBeLocallyTrained(DS, W_new, U_new, W0, U0, param_new, param0)
 trainTargetClasses = [];
-for cls = 1:param.numClasses
-    orig_acc = getOriginalAccuracy(cls, DS, W, U0, param);
-    new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param);
+for cls = 1:param_new.numClasses
+    orig_acc = getOriginalAccuracy(cls, DS, W0, U0, param0);
+    new_acc = getNewAccuracy(cls, DS, W_new, U_new, param_new);
     if new_acc == orig_acc
         continue;
     else
@@ -124,11 +122,11 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function acc_list = dispAccuracies(DS, W, U, U_new, new_numPrototypes, param)
+function acc_list = dispAccuracies(DS, W_new, U_new, W0, U0, param_new, param0)
 acc_list = [];
-for cls = 1:param.numClasses
-    orig_acc = getOriginalAccuracy(cls, DS, W, U, param);
-    new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param);
+for cls = 1:param_new.numClasses
+    orig_acc = getOriginalAccuracy(cls, DS, W0, U0, param0);
+    new_acc = getNewAccuracy(cls, DS, W_new, U_new, param_new);
     acc_list = [acc_list; orig_acc new_acc];
     fprintf('Accuracy (class %d) : %.4f ----> %.4f\n', cls, orig_acc, new_acc);    
 end
@@ -137,15 +135,15 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function orig_acc = getOriginalAccuracy(cls, DS, W, U0, param)
+function orig_acc = getOriginalAccuracy(cls, DS, W0, U0, param0)
 
 % %%%%%% Disp Accuracy
-cumNumProto = cumsum(param.numPrototypes);
+cumNumProto = cumsum(param0.numPrototypes);
 classIdx = find(DS.TL == cls);
 class_feat = DS.T(:, classIdx);
-[~, classified_raw]= max(class_feat'*W'*U0, [], 2);
+[~, classified_raw]= max(class_feat'*W0'*U0, [], 2);
 classified = zeros(numel(classified_raw), 1);
-for c = 1:param.numClasses
+for c = 1:param0.numClasses
     t = find(classified_raw <= cumNumProto(c));
     classified(t) = c;
     classified_raw(t) = Inf;
@@ -156,14 +154,14 @@ orig_acc = numel(find(classified == cls))/numel(find(DS.TL == cls));
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function new_acc = getNewAccuracy(cls, DS, W, U_new, new_numPrototypes, param)
+function new_acc = getNewAccuracy(cls, DS, W_new, U_new, param_new)
 
-cumNumProto = cumsum(new_numPrototypes);
+cumNumProto = cumsum(param_new.numPrototypes);
 classIdx = find(DS.TL == cls);
 class_feat = DS.T(:, classIdx);
-[~, classified_raw]= max(class_feat'*W'*U_new, [], 2);
+[~, classified_raw]= max(class_feat'*W_new'*U_new, [], 2);
 classified = zeros(numel(classified_raw), 1);
-for c = 1:param.numClasses
+for c = 1:param_new.numClasses
     t = find(classified_raw <= cumNumProto(c));
     classified(t) = c;
     classified_raw(t) = Inf;

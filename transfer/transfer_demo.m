@@ -42,6 +42,9 @@
 param0 = param;
 param_new = param;
 
+W0 = W;
+W_new = W;
+
 U0 = U;
 U_new = U;
 
@@ -52,7 +55,7 @@ for i=1:size(tPairs, 1)
     c1 = tPairs(i, 1);
     c2 = tPairs(i, 2);
     scale_alpha = 1.1;
-    [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W, U_new, U0, c1, c2, scale_alpha, param_new, param0);
+    [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W_new, U_new, W0, U0, c1, c2, scale_alpha, param_new, param0);
 
 
     % % Locally train
@@ -60,8 +63,7 @@ for i=1:size(tPairs, 1)
     param_new.lr_W_local = 0.00001;
     param_new.lambda_U_local = 1;
     param_new.lr_U_local = 0.00001;
-    [U_new param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
-    % [U_retrained param_new] = local_train(DS, W, U_new, param_new, trainTargetClasses);
+    [W_new, U_new param_new] = local_train(DS, W_new, U_new, param_new, trainTargetClasses);
 
     transfer_dispAccuracies(DS, W, U, U_new, param_new.numPrototypes, param0);
 end
