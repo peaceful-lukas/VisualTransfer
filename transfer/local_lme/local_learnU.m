@@ -11,6 +11,7 @@ n = 1;
 tic;
 while n <= param.maxIterU;
     cTriplets = sampleClassificationTriplets(DS, W, U, param);
+    sTriplets = sampleStructurePreservingTriplets(DS, W, U, param);
 
     dU = computeGradient(WX, U, U_orig, aux, cTriplets, param, trainTargetClasses);
     U = update(U, dU, param);
@@ -39,7 +40,7 @@ U = U - param.lr_U_local * dU;
 
 
 % gradient computation
-function dU = computeGradient(WX, U, U_orig, aux, cTriplets, param, trainTargetClasses)
+function dU = computeGradient(WX, U, U_orig, aux, cTriplets, sTriplets, param, trainTargetClasses)
 
 num_cTriplets = size(cTriplets, 1);
 num_sTriplets = size(sTriplets, 1);
