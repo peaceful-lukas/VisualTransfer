@@ -54,7 +54,7 @@ for i=1:size(tPairs, 1)
     % Transfer
     c1 = tPairs(i, 1);
     c2 = tPairs(i, 2);
-    scale_alpha = 1;
+    scale_alpha = 0.6;
     [U_new, param_new, matched_pairs, trainTargetClasses, score_GM] = transfer(DS, W_new, U_new, W0, U0, c1, c2, scale_alpha, param_new, param0);
 
 
