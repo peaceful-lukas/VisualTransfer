@@ -4,7 +4,7 @@ function cTriplets = sampleClassificationTriplets(DS, W, U, param)
 X = DS.D;
 i_vec = ceil(numel(DS.DL) * rand(param.c_batchSize, 1));
 yi_vec = DS.DL(i_vec);
-c_vec = generateDifferentClassList(yi_vec, param.numClasses)
+c_vec = generateDifferentClassList(yi_vec, param.numClasses);
 
 cTriplets = [i_vec yi_vec c_vec];
 
