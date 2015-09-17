@@ -17,5 +17,5 @@ function c_vec = generateDifferentClassList(yi_vec, numClasses)
 
 c_vec = ceil(numClasses * rand(length(yi_vec), 1));
 collapsed = find(yi_vec == c_vec);
-c_vec = mod(c_vec(collapsed), numClasses);
+c_vec(collapsed) = mod(c_vec(collapsed), numClasses);
 c_vec(find(c_vec == 0)) = numClasses;
